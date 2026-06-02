@@ -63,14 +63,14 @@ window.addEventListener('load', () => {
                 return;
         }
         //límites verticales (Y)
-        if (posY < -40) posY = -40;
-        const limiteInferior = window.innerHeight - 160; 
-        if (posY > limiteInferior) posY = limiteInferior;
+        if (posY < 0) posY = 0;
+        const lowerLimit = window.innerHeight - 70; 
+        if (posY > lowerLimit) posY = lowerLimit;
 
         //límites horizontales (X)
         if (posX < 0) posX = 0; 
-        const limiteDerecho = window.innerWidth - 70; 
-        if (posX > limiteDerecho) posX = limiteDerecho;
+        const rightLimit = window.innerWidth - 70; 
+        if (posX > rightLimit) posX = rightLimit;
 
         //ambas posiciones al elemento en pantalla
         pigeon.style.top = posY + "px";
