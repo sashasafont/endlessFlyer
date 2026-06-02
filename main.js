@@ -1,5 +1,6 @@
 let points = 0;
 let posY = window.innerHeight / 2;
+let posX = 120;
 const speed = 35;
 
 window.addEventListener('load', () => {
@@ -10,6 +11,10 @@ window.addEventListener('load', () => {
     const cloud2 = document.querySelector('.cloud2');
     const cloud3 = document.querySelector('.cloud3');
 
+    if (pigeon) {
+        pigeon.style.left = posX + "px";
+    }
+    
     //animación nubes
     let x1 = 0, x2 = 0, x3 = 0;
     const speedC1 = 0.5, speedC2 = 1.2, speedC3 = 2.5;
@@ -27,20 +32,50 @@ window.addEventListener('load', () => {
     }
     animateClouds();
 
-    //movimiento de pájaro
+    //movimiento de pájaro (con switch)
     window.addEventListener('keydown', (event) => {
-        if (event.key === "ArrowUp" || event.key === "w") {
-            posY -= speed;
-        } else if (event.key === "ArrowDown" || event.key === "s") {
-            posY += speed;
-        }
+        switch (event.key) {
+            case "ArrowUp":
+            case "w":
+            case "W":
+                posY -= speed;
+                break;
 
-        //limite
+            case "ArrowDown":
+            case "s":
+            case "S":
+                posY += speed;
+                break;
+
+            case "ArrowLeft":
+            case "a":
+            case "A":
+                posX -= speed;
+                break;
+
+            case "ArrowRight":
+            case "d":
+            case "D":
+                posX += speed;
+                break;
+                
+            default:
+                return;
+        }
+        //límites verticales (Y)
         if (posY < -40) posY = -40;
         const limiteInferior = window.innerHeight - 160; 
         if (posY > limiteInferior) posY = limiteInferior;
 
+        //límites horizontales (X)
+        if (posX < 0) posX = 0; 
+        const limiteDerecho = window.innerWidth - 70; 
+        if (posX > limiteDerecho) posX = limiteDerecho;
+
+        //ambas posiciones al elemento en pantalla
         pigeon.style.top = posY + "px";
+        pigeon.style.left = posX + "px"; 
+        
         checkCollision(); 
     });
 
