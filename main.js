@@ -2,6 +2,7 @@ let points = 0;
 let posY = window.innerHeight / 2;
 let posX = 120;
 const speed = 35;
+let breadFrameCount = 0;
 
 window.addEventListener('load', () => {
     //elementos
@@ -118,12 +119,18 @@ window.addEventListener('load', () => {
             }
         });
 
+        breadFrameCount++;
+        if (breadFrameCount >= 90) {
+            createBread();
+            breadFrameCount = 0;
+        }
+
         checkCollision();
         requestAnimationFrame(gameLoop);
     }
     gameLoop();
-});
-
+    });
+    
 //generar panes
 function createBread() {
     const bread = document.createElement('div');
@@ -135,4 +142,3 @@ function createBread() {
     
     document.body.appendChild(bread);
 }
-setInterval(createBread, 1500);
