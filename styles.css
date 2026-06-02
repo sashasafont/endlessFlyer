@@ -21,18 +21,23 @@
 
 .pigeon {
     position: absolute;
-    width: 160px;   
-    height: 160px;  
+    width: 70px;   
+    height: 70px;  
     top: 50%;
-    background-size: 500% 200%; 
-    animation: flap-wings 0.6s steps(2) infinite;
+    left: 60px;
+    font-size: 60px;
+    line-height: 1;
+    z-index: 10;
+    transform: scaleX(-1);
+    animation: flap 0.35s infinite alternate ease-in-out;
 }
-@keyframes flap-wings {
-    from { 
-        background-position: 0% 0%; 
+
+@keyframes flap {
+    0% { 
+        transform: scaleX(-1) rotate(-6deg) translateY(0px); 
     }
-    to { 
-        background-position: 100% 0%; 
+    100% { 
+        transform: scaleX(-1) rotate(6deg) translateY(5px); 
     }
 }
 
@@ -66,5 +71,4 @@
 .cloud1 { background-image: url('./assets/img/background 4/2.png'); }
 .cloud2 { background-image: url('./assets/img/background 4/3.png'); }
 .cloud3 { background-image: url('./assets/img/background 4/4.png'); }
-.pigeon { background-image: url('./assets/img/birb.png'); }
 .bread { background-image: url('./assets/img/bread.png'); }
