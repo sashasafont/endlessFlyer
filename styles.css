@@ -46,9 +46,18 @@
     width: 32px; 
     height: 32px; 
     transform: scale(2);
-    background-repeat: no-repeat;
-    background-size: ANCHO_TOTALpx 100%; 
-    image-rendering: pixelated;
+    background-image: url('./assets/img/bread.png');
+    background-size: 128px 128px; 
+    animation: spinBread 0.5s steps(4) infinite;
+}
+
+@keyframes spinBread {
+    from { 
+        background-position: 0px -32px; 
+    }
+    to { 
+        background-position: -128px -32px; 
+    }
 }
 
 #score {
@@ -67,8 +76,20 @@
     pointer-events: none;
 }
 
-.sky { background-image: url('./assets/img/background 4/1.png'); }
-.cloud1 { background-image: url('./assets/img/background 4/2.png'); }
-.cloud2 { background-image: url('./assets/img/background 4/3.png'); }
-.cloud3 { background-image: url('./assets/img/background 4/4.png'); }
-.bread { background-image: url('./assets/img/bread.png'); }
+/* Level 1 (Morning Sky) */
+body:not([class*="level-"]) .sky    { background-image: url('./assets/img/level1/1.png'); }
+body:not([class*="level-"]) .cloud1 { background-image: url('./assets/img/level1/2.png'); }
+body:not([class*="level-"]) .cloud2 { background-image: url('./assets/img/level1/3.png'); }
+body:not([class*="level-"]) .cloud3 { background-image: url('./assets/img/level1/4.png'); }
+
+/* Level 2 (Sunset Sky) */
+body.level-2 .sky    { background-image: url('./assets/img/level2/1.png'); }
+body.level-2 .cloud1 { background-image: url('./assets/img/level2/2.png'); }
+body.level-2 .cloud2 { background-image: url('./assets/img/level2/3.png'); }
+body.level-2 .cloud3 { background-image: url('./assets/img/level2/4.png'); }
+
+/* Level 3 (Night Sky) */
+body.level-3 .sky    { background-image: url('./assets/img/level3/1.png'); }
+body.level-3 .cloud1 { background-image: url('./assets/img/level3/2.png'); }
+body.level-3 .cloud2 { background-image: url('./assets/img/level3/3.png'); }
+body.level-3 .cloud3 { background-image: url('./assets/img/level3/4.png'); }
