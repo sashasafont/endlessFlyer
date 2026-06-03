@@ -3,6 +3,7 @@ let posY = window.innerHeight / 2;
 let posX = 120;
 const speed = 35;
 let breadFrameCount = 0;
+let currentLevel = 1;
 
 window.addEventListener('load', () => {
     //elementos
@@ -100,6 +101,8 @@ window.addEventListener('load', () => {
                     scoreElement.innerText = "Panes: " + points;
                 }
                 console.log("¡Pan recogido! Puntos:", points);
+
+                checkLevelUp()
             }
         });
     }
@@ -141,4 +144,37 @@ function createBread() {
     bread.style.top = y + "px";
     
     document.body.appendChild(bread);
+}
+
+function checkLevelUp() {
+    switch (points) {
+        case 25:
+            if (currentLevel === 1) {
+                currentLevel = 2;
+                document.body.className = "level-2";
+                console.log("Nivel 2 ha empezado! Obstaculos desbloqueados");
+                //aquí se cambia el cielo y empezarán a salir obstáculos
+            }
+            break;
+
+        case 50:
+            if (currentLevel === 2) {
+                currentLevel = 3;
+                document.body.className = "level-3";
+                console.log("Nivel 3 ha empezado! Velocidad aumentada.");
+            }
+            break;
+
+        case 75:
+            if (currentLevel === 3) {
+                currentLevel = 4;
+                document.body.className = "level-4";
+                console.log("Nivel final! Survival mode.");
+            }
+            break;
+
+        case 100:
+            console.log("Victoria! Has recogido todos los panes.");
+            break;
+    }
 }
