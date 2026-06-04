@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+    <div id="game-menu" class="menu-overlay">
+        <div class="menu-content">
+            <div class="menu-environment"></div>
+            
+            <h1 id="menu-title">Endless Flyer</h1>
+            <p id="menu-text">Ayuda a la paloma a comer todo el pan posible.</p>
+            <button id="menu-button">Empezar la partida</button>
+        </div>
+    </div>
+    <div id="victory-menu" class="victory-overlay hidden">
+        <div class="victory-content">
+            <div class="confetti-container"></div>
+            <h1>¡VICTORIA!</h1>
+            <p>¡Eres el rey de la plaza! Has recolectado los panes sin piedad.</p>
+            <button id="restart-button">¿VOLVER A EMPEZAR?</button>
+        </div>
+    </div>
     <div class="container">
         <div class="sky"></div>
         <div class="cloud1"></div>
@@ -17,5 +34,11 @@
     <div id="score">Panes: 0</div>
     <div class="bread"></div>
     <script src="main.js"></script>
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="lightning-effect">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
 </body>
 </html>
