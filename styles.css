@@ -76,19 +76,118 @@
     pointer-events: none;
 }
 
-/* Level 1 (Morning Sky) */
+/* transiciones para menús*/
+.menu-overlay, .victory-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.menu-overlay { background-color: rgba(15, 32, 39, 0.3); backdrop-filter: blur(10px); z-index: 200; }
+.victory-overlay { background-color: rgba(255, 215, 0, 0.2); backdrop-filter: blur(12px); z-index: 300; }
+.menu-overlay.hidden, .victory-overlay.hidden { opacity: 0; pointer-events: none; }
+
+/* contenedores de tarjetas menú */
+.menu-content, .victory-content {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+}
+
+.menu-content { padding: 50px 70px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); border: 4px solid; }
+.victory-content { padding: 60px 80px; border-radius: 30px; background: linear-gradient(135deg, #FFFDF0, #FFF5D1); border: 6px solid #FFD700; box-shadow: 0 25px 60px rgba(212, 175, 55, 0.5); }
+
+/* textos menú */
+.menu-content h1, .menu-content p, .menu-content button { position: relative; z-index: 10; }
+.menu-content h1 { font-family: 'Arial Black', sans-serif; font-size: 36px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.menu-content p { font-family: Arial, sans-serif; margin-bottom: 30px; font-size: 18px; font-weight: bold; }
+
+.victory-content h1 { font-family: 'Arial Black', sans-serif; font-size: 42px; color: #B8860B; text-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; animation: bounceTitle 1s ease-in-out infinite alternate; }
+.victory-content p { font-family: Arial, sans-serif; color: #745200; font-size: 20px; font-weight: bold; margin-bottom: 35px; max-width: 450px; }
+
+/* botones y efectos hover*/
+.menu-content button, #restart-button {
+    border: none; font-weight: bold; cursor: pointer;
+    transition: transform 0.1s, background-color 0.2s, box-shadow 0.2s;
+}
+.menu-content button { color: white; padding: 14px 35px; font-size: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+.menu-content button:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+#restart-button { background: linear-gradient(to bottom, #FFDF00, #D4AF37); color: #5D4037; border: 2px solid #B8860B; padding: 16px 40px; font-size: 22px; border-radius: 50px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+#restart-button:hover { transform: scale(1.08); box-shadow: 0 12px 25px rgba(212, 175, 55, 0.6); }
+
+/* contenedores de entorno */
+.menu-environment { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.confetti-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; perspective: 700px; }
+.confetti-piece { position: absolute; top: -20px; border-radius: 2px; animation: fallAndSpin 4s linear infinite; }
+
+/* temas de color y efectos climáticos por nivel */
+
+/* NIVEL 1: mañana */
+body:not([class*="level-"]) .menu-content { background: linear-gradient(135deg, #FFFDF0, #E0F6FF); border-color: #87CEEB; }
+body:not([class*="level-"]) .menu-content h1 { color: #2B6CB0; }
+body:not([class*="level-"]) .menu-content p  { color: #4A5568; }
+body:not([class*="level-"]) .menu-content button { background-color: #87CEEB; }
+body:not([class*="level-"]) .menu-content button:hover { background-color: #4DB8E7; }
+body:not([class*="level-"]) .menu-environment::before { content: ''; position: absolute; top: -20px; right: -20px; width: 90px; height: 90px; background: #FFDE4D; border-radius: 50%; box-shadow: 0 0 30px #FFDE4D, 0 0 60px #FFB200; animation: rotateSun 10s linear infinite; }
+
+/* NIVEL 2: atardecer */
+body.level-2 .menu-content { background: linear-gradient(135deg, #FFEBE5, #FFE2CD); border-color: #FF7E5F; }
+body.level-2 .menu-content h1 { color: #D73815; }
+body.level-2 .menu-content p  { color: #7B341E; }
+body.level-2 .menu-content button { background-color: #FF7E5F; }
+body.level-2 .menu-content button:hover { background-color: #FA623C; }
+body.level-2 .menu-environment::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, rgba(255, 75, 43, 0.4), transparent); animation: pulseSunset 3s ease-in-out infinite alternate; }
+
+/* NIVEL 3: noche */
+body.level-3 .menu-content { background: linear-gradient(135deg, #1A1C29, #2A2E45); border-color: #3498DB; }
+body.level-3 .menu-content h1 { color: #ECEFF1; text-shadow: 0 0 10px #3498DB; }
+body.level-3 .menu-content p  { color: #90A4AE; }
+body.level-3 .menu-content button { background-color: #3498DB; }
+body.level-3 .menu-content button:hover { background-color: #1A79B8; }
+body.level-3 .menu-environment::before { content: ''; position: absolute; top: -10px; left: 70%; width: 4px; height: 4px; background: white; border-radius: 50%; box-shadow: 0 0 10px white, -10px 10px 15px white, -20px 20px 20px rgba(255,255,255,0.5); animation: shootingStar 2.5s linear infinite; }
+
+/* NIVEL 4: la tormenta */
+body.level-4 .menu-content { background: linear-gradient(135deg, #0F172A, #1E293B); border-color: #10B981; }
+body.level-4 .menu-content h1 { color: #FFFFFF; text-shadow: 0 0 15px #10B981; }
+body.level-4 .menu-content p  { color: #94A3B8; }
+body.level-4 .menu-content button { background-color: #10B981; }
+body.level-4 .menu-content button:hover { background-color: #059669; }
+body.level-4 .menu-environment::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.4); opacity: 0; animation: flashBackground 5s linear infinite; z-index: 1; }
+body.level-4 .menu-environment::after { content: ''; position: absolute; top: -10%; left: 45%; width: 8px; height: 120%; background: linear-gradient(to bottom, #FFFFFF, #80DEEA); filter: url(#lightning-effect) drop-shadow(0 0 15px #00E5FF) drop-shadow(0 0 30px #00B0FF); opacity: 0; animation: strikeLightning 5s linear infinite; z-index: 2; }
+
+/* animaciones y keyframes */
+@keyframes flap { 0% { transform: scaleX(-1) rotate(-6deg) translateY(0px); } 100% { transform: scaleX(-1) rotate(6deg) translateY(5px); } }
+@keyframes spinBread { from { background-position: 0px -32px; } to { background-position: -128px -32px; } }
+@keyframes rotateSun { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.05); } 100% { transform: rotate(360deg) scale(1); } }
+@keyframes pulseSunset { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+@keyframes bounceTitle { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+@keyframes shootingStar { 0% { transform: translateX(0) translateY(0) scale(0); opacity: 1; } 30% { transform: translateX(-150px) translateY(150px) scale(1); opacity: 1; } 60% { transform: translateX(-300px) translateY(300px) scale(0); opacity: 0; } 100% { transform: translateX(-300px) translateY(300px) scale(0); opacity: 0; } }
+@keyframes flashBackground { 0%, 84%, 88%, 92%, 100% { opacity: 0; } 85%, 89% { opacity: 0.6; } 86% { opacity: 0.1; } 90% { opacity: 1; } }
+@keyframes strikeLightning { 0%, 84%, 88%, 92%, 100% { opacity: 0; transform: scaleX(1); } 85% { opacity: 0.9; transform: scaleX(0.8) skewX(-5deg); } 86% { opacity: 0; } 90% { opacity: 1; transform: scaleX(1.3) skewX(5deg); } 91% { opacity: 0.5; transform: scaleX(0.5); } }
+@keyframes fallAndSpin { 0% { transform: translateY(0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(450px) rotateX(720deg) rotateY(360deg) rotateZ(180deg); opacity: 0; } }
+
+/* IMG fondo juego */
+/* Nivel 1 */
 body:not([class*="level-"]) .sky    { background-image: url('./assets/img/level1/1.png'); }
 body:not([class*="level-"]) .cloud1 { background-image: url('./assets/img/level1/2.png'); }
 body:not([class*="level-"]) .cloud2 { background-image: url('./assets/img/level1/3.png'); }
 body:not([class*="level-"]) .cloud3 { background-image: url('./assets/img/level1/4.png'); }
 
-/* Level 2 (Sunset Sky) */
+/* Nivel 2 */
 body.level-2 .sky    { background-image: url('./assets/img/level2/1.png'); }
 body.level-2 .cloud1 { background-image: url('./assets/img/level2/2.png'); }
 body.level-2 .cloud2 { background-image: url('./assets/img/level2/3.png'); }
 body.level-2 .cloud3 { background-image: url('./assets/img/level2/4.png'); }
 
-/* Level 3 (Night Sky) */
+/* Nivel 3 */
 body.level-3 .sky    { background-image: url('./assets/img/level3/1.png'); }
 body.level-3 .cloud1 { background-image: url('./assets/img/level3/2.png'); }
 body.level-3 .cloud2 { background-image: url('./assets/img/level3/3.png'); }
