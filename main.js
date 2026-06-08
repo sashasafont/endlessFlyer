@@ -36,9 +36,14 @@ window.addEventListener('load', () => {
     restartButton.addEventListener('click', () => {
         victoryMenu.classList.add('hidden');
         
+        //limpiar confetti al reset
         const confettiContainer = document.querySelector('.confetti-container');
         if (confettiContainer) confettiContainer.innerHTML = '';
         
+        //limpiar las gotas de lluvia al reset
+        const stormContainer = document.getElementById('storm-container');
+        if (stormContainer) stormContainer.innerHTML = '';
+
         //reset de estado y marcadores
         points = 0;
         currentLevel = 1;
@@ -119,8 +124,6 @@ window.addEventListener('load', () => {
         //ambas posiciones al elemento en pantalla
         pigeon.style.top = posY + "px";
         pigeon.style.left = posX + "px"; 
-        
-        checkCollision(); 
     });
 
     //colisiones
@@ -176,6 +179,7 @@ window.addEventListener('load', () => {
         requestAnimationFrame(gameLoop);
     }
     gameLoop();
+    updateStormEffect();
     });
     
 //generar panes
@@ -192,7 +196,8 @@ function createBread() {
 
 function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
     let shouldPause = false;
-
+    
+    //CAMBIAR CASES CUANDO SE ACABA CON EL DESAROLLO
     switch (points) {
         case 2:
             if (currentLevel === 1) {
@@ -250,26 +255,62 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
     }
 }
 
-    function createConfettiParticles() {
-    const container = document.querySelector('.confetti-container');
-    if (!container) return;
-    container.innerHTML = '';
-    const colors = ['#FFD700', '#FF5733', '#33FF57', '#3357FF', '#F333FF', '#33FFF0'];
-
-    for (let i = 0; i < 40; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti-piece';
-
-        //estilos de tamaño, color y posición aleatoria del confetti
-        confetti.style.width = (Math.random() * 6 + 6) + 'px';
-        confetti.style.height = (Math.random() * 4 + 10) + 'px';
-        confetti.style.left = (Math.random() * 100) + '%';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-
-        //tiempos de animación del confetti
-        confetti.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
-        confetti.style.animationDelay = (Math.random() * 2) + 's';
-
-        container.appendChild(confetti);
+// generador de lluvia y rayos (nivel 4)
+function updateStormEffect() {
+    if (!document.body.classList.contains('level-4') || isPaused) {
+        requestAnimationFrame(updateStormEffect);
+        return;
     }
+
+    const container = document.getElementById('storm-container');
+    if (container) {
+        for (let i = 0; i < 2; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'drop';
+            drop.style.left = Math.random() * window.innerWidth + 'px';
+            drop.style.top = (Math.random() * -50) + 'px';
+            drop.style.animationDuration = (Math.random() * 0.3 + 0.4) + 's';
+            container.appendChild(drop);
+            setTimeout(() => { drop.remove(); }, 600);
+        }
+        // probabilidad por frame (rayo)
+        if (Math.random() < 0.010) {
+            const lightning = document.createElement('div');
+            lightning.className = 'game-lightning';
+
+            lightning.style.left = (Math.random() * 80 + 10) + '%'; 
+
+            container.appendChild(lightning);
+
+            setTimeout(() => {
+                lightning.remove();
+            }, 400);
+        }
+    }
+
+    requestAnimationFrame(updateStormEffect);
 }
+
+    function createConfettiParticles() {
+        const container = document.querySelector('.confetti-container');
+        if (!container) return;
+        container.innerHTML = '';
+        const colors = ['#FFD700', '#FF5733', '#33FF57', '#3357FF', '#F333FF', '#33FFF0'];
+
+        for (let i = 0; i < 40; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+
+            //estilos de tamaño, color y posición aleatoria del confetti
+            confetti.style.width = (Math.random() * 6 + 6) + 'px';
+            confetti.style.height = (Math.random() * 4 + 10) + 'px';
+            confetti.style.left = (Math.random() * 100) + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+            //tiempos de animación del confetti
+            confetti.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+            confetti.style.animationDelay = (Math.random() * 2) + 's';
+
+            container.appendChild(confetti);
+        }
+    }
