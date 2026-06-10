@@ -25,7 +25,6 @@
     top: 50%;
     left: 60px;
     font-size: 60px;
-    line-height: 1;
     z-index: 10;
     transform: scaleX(-1);
     animation: flap 0.35s infinite alternate ease-in-out;
@@ -41,11 +40,9 @@
     animation: spinBread 0.5s steps(4) infinite;
 }
 
-#score {
+#score, #lives-container {
     position: absolute;
     top: 20px;
-    right: 0%;
-    transform: translateX(-50%);
     font-family: Arial, sans-serif;
     font-size: 24px;
     font-weight: bold;
@@ -55,6 +52,33 @@
     border-radius: 20px;
     z-index: 100;
     pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+/* el score a la derecha */
+#score {
+    right: 0%;
+    transform: translateX(-50%);
+}
+
+/* el live container a la izquierda */
+#lives-container {
+    left: 20px;
+    gap: 10px;
+}
+
+#lives-container div {
+    display: flex;
+}
+
+/* aplica el diseño retro 2D a cada corazón */
+#lives-container i.bi-heart-fill {
+    display: inline-block;
+    color: #ff3344; 
+    font-size: 24px; 
+    margin-right: 4px; /* separa la sombra del siguiente icono */
+    filter: drop-shadow(2px 2px 0px #000000); /* sombra sólida */
 }
 
 /* transiciones para menús*/
@@ -104,6 +128,35 @@
     opacity: 0;
     pointer-events: none;
     animation: flashLightningReal 0.4s ease-out forwards;
+}
+
+/* avión */
+.obstacle {
+    position: absolute;
+    z-index: 15;
+    width: 60px;
+    height: 60px;
+    font-size: 50px;
+    color: #4A5568;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.obstacle i {
+    display: inline-block;
+    transform: rotate(-90deg);
+}
+
+/* ráfagas de viento del Nivel 4 */
+.wind-gust {
+    position: absolute;
+    z-index: 25;
+    font-size: 60px;
+    color: #ffffff;
+    pointer-events: none;
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.6));
+    animation: windVibration 0.1s infinite alternate;
 }
 
 .menu-overlay { background-color: rgba(15, 32, 39, 0.3); backdrop-filter: blur(10px); z-index: 200; }
@@ -192,6 +245,7 @@ body.level-4 .menu-environment::after { content: ''; position: absolute; top: -1
 @keyframes fallAndSpin { 0% { transform: translateY(0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(450px) rotateX(720deg) rotateY(360deg) rotateZ(180deg); opacity: 0; } }
 @keyframes rainFall { 0% { transform: translateY(-50px) rotate(15deg);} 100% { transform: translateY(105vh) translateX(-100px) rotate(15deg); } }
 @keyframes flashLightningReal {0%, 100% { opacity: 0; } 10%, 30% { opacity: 1; transform: scaleX(1.2) skewX(-4deg); } 20% { opacity: 0.2; } 40% { opacity: 0.8; transform: scaleX(0.8) skewX(4deg); } } /*rayo juego */
+@keyframes windVibration { 0% { transform: translateY(-3px); } 100% { transform: translateY(3px); }} /* viento */
 
 /* IMG fondo juego */
 /* Nivel 1 */

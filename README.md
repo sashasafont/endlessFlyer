@@ -17,20 +17,31 @@ The game features an endless gameplay loop that gradually tests your reflexes an
 
 ---
 
-## Built With
+## Features
 
-- JavaScript
-- HTML5
-- CSS3
+- **Progressive Level System:** - **Level 1 (Daytime):** A peaceful flight to get used to the controls while collecting your first crumbs.
+  - **Level 2 (Afternoon):** The sky gets busier. Watch out for oncoming airplanes!
+  - **Level 3 (Nighttime):** Reduced visibility and faster speeds make dodging obstacles a real challenge.
+  - **Level 4 (The Storm):** The ultimate final challenge. Brave the rain, flashing lightning, and heavy wind gusts that physically push your bird backward.
+- **Life System:** You start with 3 heart lives. Hitting an airplane costs you a life, but watch out—losing all of them triggers a Game Over.
+- **Dynamic Controls:** Smooth 4-way movement to dodge threats effectively.
+- **Victory Visuals:** Reach the final score goal to trigger a special victory screen complete with animated confetti particles.
 
 ---
 
-## Features
+## Controls
 
-- Endless arcade-style gameplay
-- Simple controls using only Arrow Up / Arrow Down
-- Increasing difficulty over time
-- Score tracking system
+You can control the bird using two different layouts for maximum comfort:
+- **Arrow Keys:** `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`
+- **WASD Keys:** `W` (Up), `S` (Down), `A` (Left), `D` (Right)
+
+---
+
+## Built With
+
+- **HTML5 & CSS3:** For the game structure, layout container restrictions, and custom animations (clouds, rain drops, and lightning).
+- **JavaScript:** Powers the entire core game loop, dynamic random spawning, collision detection physics, and state management (pause, level-ups, game over, and reset).
+- **Bootstrap Icons:** Used for rendering high-quality vector graphics for hearts, airplanes, and wind gusts.
 
 ---
 
@@ -53,5 +64,6 @@ Special thanks to the original creators of the assets used in this project:
 - Bird sprites: [https://fireknights.itch.io/free-bird-sprite-animation-10-frames]
 - Bread sprites: [https://caz-bee.itch.io/bread]
 - Background / Environment: [https://free-game-assets.itch.io/free-sky-with-clouds-background-pixel-art-set?download]
+- Icons: [Bootstrap Icons](https://icons.getbootstrap.com/)
 
 All rights belong to their respective authors. If you are the owner of any of these assets and want them removed or properly attributed, please contact me.
