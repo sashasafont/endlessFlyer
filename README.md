@@ -61,9 +61,18 @@ All assets are used for educational and non-commercial purposes.
 
 Special thanks to the original creators of the assets used in this project:
 
-- Bird sprites: [https://fireknights.itch.io/free-bird-sprite-animation-10-frames]
-- Bread sprites: [https://caz-bee.itch.io/bread]
-- Background / Environment: [https://free-game-assets.itch.io/free-sky-with-clouds-background-pixel-art-set?download]
-- Icons: [Bootstrap Icons](https://icons.getbootstrap.com/)
+- **Bird sprites:** [Fireknights (Itch.io)](https://fireknights.itch.io/free-bird-sprite-animation-10-frames)
+- **Bread sprites:** [Caz-bee (Itch.io)](https://caz-bee.itch.io/bread)
+- **Background / Environment:** [Free Game Assets (Itch.io)](https://free-game-assets.itch.io/free-sky-with-clouds-background-pixel-art-set?download)
+- **Icons:** [Bootstrap Icons](https://icons.getbootstrap.com/)
+- **Main theme:** [Chajamakesmusic (Itch.io)](https://chajamakesmusic.itch.io/cute-and-silly-rpg-music-pack)
+
+### Sound Effects (SFX):
+1. **Game over:** [Trumpet SFX by remaxim (OpenGameArt)](https://opengameart.org/content/game-over-trumpet-sfx)
+2. **Victory:** [Hyper Ultra Fanfare by nene (OpenGameArt)](https://opengameart.org/content/hyper-ultra-fanfare)
+3. **Collect:** [Gem Collect SFX by artisticdude (OpenGameArt)](https://opengameart.org/content/gem-collect-sfx)
+4. **Level up:** [UI Sound Effects Pack by wobbleboxx (OpenGameArt)](https://opengameart.org/content/ui-sound-effects-pack)
+
+---
 
 All rights belong to their respective authors. If you are the owner of any of these assets and want them removed or properly attributed, please contact me.

@@ -29,11 +29,14 @@
         <div class="cloud1"></div>
         <div class="cloud2"></div>
         <div class="cloud3"></div>
-            <div class="pigeon">🕊️</div>
+        <div class="pigeon">🕊️</div>
     </div>
     <div id="score">Panes: 0</div>
     <div class="bread"></div>
-    <script src="main.js"></script>
+    <div id="volume-container">
+    <span id="volume-icon"><i class="bi bi-volume-up-fill"></i></span>
+    <input type="range" id="volume-slider" min="0" max="100" value="50">
+</div>
     <svg style="position: absolute; width: 0; height: 0;">
         <filter id="lightning-effect">
             <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="noise" />
@@ -41,5 +44,10 @@
         </filter>
     </svg>
     <div id="storm-container" class="storm-layer"></div>
+    <script src="variables.js"></script>
+    <script src="audio.js"></script>
+    <script src="player.js"></script>
+    <script src="obstacles.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
