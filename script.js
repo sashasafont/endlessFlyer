@@ -17,11 +17,22 @@ window.addEventListener("load", () => {
     const restartButton = document.getElementById("restart-button");
 
     // contenedor de las vidas
-    const livesContainer = document.createElement("div");
-    livesContainer.id = "lives-container";
-    document.body.appendChild(livesContainer);
+    let livesContainer = document.getElementById("lives-container");
+    if (!livesContainer) {
+        livesContainer = document.createElement("div");
+        livesContainer.id = "lives-container";
+        document.body.appendChild(livesContainer);
+    }
 
     updateLivesUI(); // inicializar las vidas al cargar la partida
+
+    // control de deslizador de volumen
+    const volumeSlider = document.getElementById("volume-slider");
+    if (volumeSlider) {
+        volumeSlider.addEventListener("input", (event) => {
+            updateGlobalVolume(event.target.value);
+        });
+    }
 
     // posición inicial de la paloma
     if (pigeon) {
@@ -35,6 +46,7 @@ window.addEventListener("load", () => {
         } else {
             gameMenu.classList.add("hidden"); // ocultar menú para seguir jugando
             isPaused = false;
+            playMusic();
         }
     });
 
@@ -56,9 +68,7 @@ window.addEventListener("load", () => {
         if (stormContainer) stormContainer.innerHTML = "";
 
         // eliminar panes, aviones y viento de la pantalla anterior
-        document
-            .querySelectorAll(".obstacle, .bread, .wind-gust")
-            .forEach((el) => el.remove());
+        document.querySelectorAll(".obstacle, .bread, .wind-gust").forEach((el) => el.remove());
 
         // reset de variables y UI
         points = 0;
@@ -78,15 +88,12 @@ window.addEventListener("load", () => {
         }
 
         isPaused = false; // reanudar el juego
+        playMusic();
     }
 
     // animación nubes
-    let x1 = 0,
-        x2 = 0,
-        x3 = 0;
-    const speedC1 = 0.5,
-        speedC2 = 1.2,
-        speedC3 = 2.5;
+    let x1 = 0, x2 = 0, x3 = 0;
+    const speedC1 = 0.5, speedC2 = 1.2, speedC3 = 2.5;
 
     function animateClouds() {
         if (!isPaused) {
@@ -172,6 +179,7 @@ window.addEventListener("load", () => {
                 bread.remove();
                 points++;
                 if (scoreElement) scoreElement.innerText = "Panes: " + points;
+                collectSoundEffect(); // sonido cuando se recoge pan
                 checkLevelUp(gameMenu, menuTitle, menuText, menuButton);
             }
         });
@@ -190,15 +198,16 @@ window.addEventListener("load", () => {
                 obstacle.remove();
                 lives--;
                 updateLivesUI(); // borra y actualiza los iconos 2D
+                hitSoundEffect(); // sonido de impacto
 
                 // lógica de game over
                 if (lives <= 0) {
                     isPaused = true;
+                    stopMusic();
+                    loseSoundEffect(); // sonido de derrota
 
                     // limpieza de objetos en juego
-                    document
-                        .querySelectorAll(".bread, .obstacle, .wind-gust")
-                        .forEach((el) => el.remove());
+                    document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
 
                     // textos del menú para avisar que se acabó el juego
                     menuTitle.innerText = "¡SE ACABÓ!";
@@ -224,6 +233,7 @@ window.addEventListener("load", () => {
             ) {
                 gust.remove();
                 activeWindForce = 15;
+                hitSoundEffect(); // sonido de impacto con el viento
             }
         });
     }
@@ -231,10 +241,8 @@ window.addEventListener("load", () => {
     // bucle del juego
     function gameLoop() {
         if (!isPaused) {
-            let moveSpeed,
-                obstacleSpeed,
-                obstacleSpawnRate,
-                windSpeed = 0;
+            // inicialización limpia con ceros
+            let moveSpeed = 0, obstacleSpeed = 0, obstacleSpawnRate = 0, windSpeed = 0;
 
             switch (currentLevel) {
                 case 1:
@@ -350,8 +358,7 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
                 currentLevel = 3;
                 document.body.className = "level-3";
                 menuTitle.innerText = "¡INCREÍBLE!";
-                menuText.innerText =
-                    "Superaste el Nivel 2. Cuidado, se hace de noche...";
+                menuText.innerText = "Superaste el Nivel 2. Cuidado, se hace de noche...";
                 menuButton.innerText = "EMPEZAR NIVEL 3";
                 shouldPause = true;
             }
@@ -362,8 +369,7 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
                 currentLevel = 4;
                 document.body.className = "level-4";
                 menuTitle.innerText = "NIVEL FINAL";
-                menuText.innerText =
-                    "¡Último esfuerzo! Sobrevive a la tormenta y vigila los vientos.";
+                menuText.innerText = "¡Último esfuerzo! Sobrevive a la tormenta y vigila los vientos.";
                 menuButton.innerText = "PULSAR PARA JUGAR";
                 shouldPause = true;
             }
@@ -371,9 +377,9 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
 
         case 5:
             isPaused = true;
-            document
-                .querySelectorAll(".bread, .obstacle, .wind-gust")
-                .forEach((el) => el.remove());
+            document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
+            stopMusic();
+            winSoundEffect();
             const vicOverlay = document.getElementById("victory-menu");
             if (vicOverlay) {
                 vicOverlay.classList.remove("hidden");
@@ -385,9 +391,9 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
     if (shouldPause) {
         isPaused = true;
         gameMenu.classList.remove("hidden");
-        document
-            .querySelectorAll(".bread, .obstacle, .wind-gust")
-            .forEach((el) => el.remove());
+        document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
+        pauseMusic();
+        levelUpSoundEffect(); // sonido de nivel superado
     }
 }
 
@@ -408,9 +414,7 @@ function updateStormEffect() {
             drop.style.animationDuration = Math.random() * 0.3 + 0.4 + "s";
             container.appendChild(drop);
 
-            setTimeout(() => {
-                drop.remove();
-            }, 600);
+            setTimeout(() => { drop.remove(); }, 600);
         }
         if (Math.random() < 0.01) {
             const lightning = document.createElement("div");
@@ -418,9 +422,7 @@ function updateStormEffect() {
             lightning.style.left = Math.random() * 80 + 10 + "%";
             container.appendChild(lightning);
 
-            setTimeout(() => {
-                lightning.remove();
-            }, 400);
+            setTimeout(() => { lightning.remove(); }, 400);
         }
     }
 
@@ -432,14 +434,7 @@ function createConfettiParticles() {
     const container = document.querySelector(".confetti-container");
     if (!container) return;
     container.innerHTML = "";
-    const colors = [
-        "#FFD700",
-        "#FF5733",
-        "#33FF57",
-        "#3357FF",
-        "#F333FF",
-        "#33FFF0",
-    ];
+    const colors = ["#FFD700", "#FF5733", "#33FF57", "#3357FF", "#F333FF", "#33FFF0"];
 
     for (let i = 0; i < 40; i++) {
         const confetti = document.createElement("div");
@@ -448,8 +443,7 @@ function createConfettiParticles() {
         confetti.style.width = Math.random() * 6 + 6 + "px";
         confetti.style.height = Math.random() * 4 + 10 + "px";
         confetti.style.left = Math.random() * 100 + "%";
-        confetti.style.backgroundColor =
-            colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
 
         confetti.style.animationDuration = Math.random() * 2 + 2.5 + "s";
         confetti.style.animationDelay = Math.random() * 2 + "s";

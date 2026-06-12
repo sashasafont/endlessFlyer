@@ -1,4 +1,4 @@
-// obstacles.js - generación de panes y obstáculos
+// obstacles.js - panes y obstáculos
 
 // generar panes
 function createBread() {
