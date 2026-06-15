@@ -61,7 +61,7 @@ All assets are used for educational and non-commercial purposes.
 
 Special thanks to the original creators of the assets used in this project:
 
-- **Bird sprites:** [Fireknights (Itch.io)](https://fireknights.itch.io/free-bird-sprite-animation-10-frames)
+- **Bird sprites:** [Fireknights (Itch.io)](https://carysaurus.itch.io/bird-sprites)
 - **Bread sprites:** [Caz-bee (Itch.io)](https://caz-bee.itch.io/bread)
 - **Background / Environment:** [Free Game Assets (Itch.io)](https://free-game-assets.itch.io/free-sky-with-clouds-background-pixel-art-set?download)
 - **Icons:** [Bootstrap Icons](https://icons.getbootstrap.com/)

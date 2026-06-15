@@ -20,13 +20,12 @@
 
 .pigeon {
     position: absolute;
-    width: 70px;   
-    height: 70px;  
     top: 50%;
     left: 60px;
-    font-size: 60px;
     z-index: 10;
-    transform: scaleX(-1);
+    transform: translateY(-50%);
+    width: 85px;
+    height: 85px;
     animation: flap 0.35s infinite alternate ease-in-out;
 }
 
@@ -295,6 +294,7 @@ body.level-4 .menu-environment::after { content: ''; position: absolute; top: -1
 @keyframes rainFall { 0% { transform: translateY(-50px) rotate(15deg);} 100% { transform: translateY(105vh) translateX(-100px) rotate(15deg); } }
 @keyframes flashLightningReal {0%, 100% { opacity: 0; } 10%, 30% { opacity: 1; transform: scaleX(1.2) skewX(-4deg); } 20% { opacity: 0.2; } 40% { opacity: 0.8; transform: scaleX(0.8) skewX(4deg); } } /*rayo juego */
 @keyframes windVibration { 0% { transform: translateY(-3px); } 100% { transform: translateY(3px); }} /* viento */
+@keyframes flap { 0% { transform: translateY(-50%) rotate(-6deg); } 100% { transform: translateY(-50%) rotate(6deg) translateY(5px); } } /*pajaro*/
 
 /* IMG fondo juego */
 /* Nivel 1 */
