@@ -50,8 +50,6 @@ function drawBird(timestamp) {
     birdCtx.clearRect(0, 0, birdCanvas.width, birdCanvas.height);
 
     birdCtx.save();
-    birdCtx.translate(birdCanvas.width, 0);
-    birdCtx.scale(-1, 1);
 
     birdCtx.drawImage(
         birdImg,
