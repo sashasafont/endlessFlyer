@@ -239,7 +239,13 @@ window.addEventListener("load", () => {
     }
 
     // bucle del juego
-    function gameLoop() {
+    function gameLoop(timestamp) {
+
+        if (pigeon) {
+            pigeon.style.top = posY + "px";
+            pigeon.style.left = posX + "px";
+        }
+
         if (!isPaused) {
             // inicialización limpia con ceros
             let moveSpeed = 0, obstacleSpeed = 0, obstacleSpawnRate = 0, windSpeed = 0;
@@ -279,6 +285,8 @@ window.addEventListener("load", () => {
                 if (posX < 0) posX = 0;
                 if (pigeon) pigeon.style.left = posX + "px";
             }
+
+            drawBird(timestamp);
 
             // mover panes
             const breads = document.querySelectorAll(".bread");
@@ -394,6 +402,11 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
         document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
         pauseMusic();
         levelUpSoundEffect(); // sonido de nivel superado
+        posY = window.innerHeight / 2; 
+        posX = 120;
+        breadFrameCount = 0;
+        obstacleFrameCount = 0;
+        if (typeof windFrameCount !== 'undefined') windFrameCount = 0;
     }
 }
 
