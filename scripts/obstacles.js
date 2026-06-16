@@ -5,21 +5,19 @@ function createBread() {
     if (isPaused) return;
     const bread = document.createElement("div");
     bread.className = "bread";
-    const x = window.innerWidth + 50;
-    const y = Math.random() * (window.innerHeight - 100) + 50;
+    const x = window.innerWidth + 50; //posicion inicial
+    const y = Math.random() * (window.innerHeight - 100) + 50; //altura aleatoria manteniendo margenes
     bread.style.left = x + "px";
     bread.style.top = y + "px";
-
     document.body.appendChild(bread);
 }
 
 // generar obstáculos (aviones) en posiciones aleatorias según el nivel
 function createObstacle() {
     if (currentLevel === 1 || isPaused) return;
-    const gameContainer = document.querySelector(".container") || document.body;
     const obstacle = document.createElement("div");
     obstacle.className = "obstacle";
-    obstacle.innerHTML = '<i class="bi bi-airplane-fill"></i>';
+    obstacle.innerHTML = '<i class="bi bi-airplane-fill"></i>'; //iconos bootstrap
 
     // posicionamiento dinámico aleatorio
     const x = window.innerWidth + 80;
@@ -27,7 +25,7 @@ function createObstacle() {
     obstacle.style.left = x + "px";
     obstacle.style.top = y + "px";
 
-    gameContainer.appendChild(obstacle);
+    document.body.appendChild(obstacle);
 }
 
 // generar ráfagas de viento visuales en posiciones Y aleatorias

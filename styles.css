@@ -1,15 +1,18 @@
+/* reseteo y config base*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: hidden; /* evita barras de scroll no deseadas */
 }
+
 .container {
     position: relative;
     height: 100vh;
     width: 100vw;
 }
 
+/* capas de fondo, cielo y nubes */
 .sky, .cloud1, .cloud2, .cloud3 {
     position: absolute;
     height: 100vh;
@@ -26,19 +29,86 @@
     transform: translateY(-50%);
     width: 85px;
     height: 85px;
-    animation: flap 0.35s infinite alternate ease-in-out;
+    animation: flap 0.35s infinite alternate ease-in-out; /* simula aleteo */
 }
 
 .bread {
     position: absolute;
     width: 32px; 
     height: 32px; 
-    transform: scale(2);
+    transform: scale(2); /* agranda sprite */
     background-image: url('./assets/img/bread.png');
     background-size: 128px 128px; 
-    animation: spinBread 0.5s steps(4) infinite;
+    animation: spinBread 0.5s steps(4) infinite; /* animación por frames */
 }
 
+/* avión */
+.obstacle {
+    position: absolute;
+    z-index: 15;
+    width: 60px;
+    height: 60px;
+    font-size: 50px;
+    color: #4A5568;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* rotación del icono */
+.obstacle i {
+    display: inline-block;
+    transform: rotate(-90deg);
+}
+
+/* ráfagas de viento del Nivel 4 */
+.wind-gust {
+    position: absolute;
+    z-index: 25;
+    font-size: 60px;
+    color: #ffffff;
+    pointer-events: none;
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.6));
+    animation: windVibration 0.1s infinite alternate;
+}
+
+/* container de la tormenta */
+.storm-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* la gota */
+.drop {
+    position: absolute;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
+    width: 1.5px;
+    height: 45px;
+    opacity: 0.7;
+    transform: rotate(15deg);
+    animation: rainFall 0.6s linear infinite;
+}
+
+/* el rayo que cae durante el nivel 4 */
+.game-lightning {
+    position: absolute;
+    top: -10%;
+    width: 12px;
+    height: 120%;
+    background: linear-gradient(to bottom, #FFFFFF, #80DEEA);
+    filter: url(#lightning-effect) drop-shadow(0 0 20px #00E5FF) drop-shadow(0 0 40px #00B0FF);
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+    animation: flashLightningReal 0.4s ease-out forwards;
+}
+
+/* interfaz de usuario (score, vidas, volumen) */
 #score, #lives-container {
     position: absolute;
     top: 20px;
@@ -167,71 +237,6 @@
     transition: opacity 0.5s ease;
 }
 
-/* container de la tormenta */
-.storm-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 5;
-}
-
-/* la gota */
-.drop {
-    position: absolute;
-    background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
-    width: 1.5px;
-    height: 45px;
-    opacity: 0.7;
-    transform: rotate(15deg);
-    animation: rainFall 0.6s linear infinite;
-}
-
-/* el rayo que cae durante el nivel 4 */
-.game-lightning {
-    position: absolute;
-    top: -10%;
-    width: 12px;
-    height: 120%;
-    background: linear-gradient(to bottom, #FFFFFF, #80DEEA);
-    filter: url(#lightning-effect) drop-shadow(0 0 20px #00E5FF) drop-shadow(0 0 40px #00B0FF);
-    z-index: 4;
-    opacity: 0;
-    pointer-events: none;
-    animation: flashLightningReal 0.4s ease-out forwards;
-}
-
-/* avión */
-.obstacle {
-    position: absolute;
-    z-index: 15;
-    width: 60px;
-    height: 60px;
-    font-size: 50px;
-    color: #4A5568;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.obstacle i {
-    display: inline-block;
-    transform: rotate(-90deg);
-}
-
-/* ráfagas de viento del Nivel 4 */
-.wind-gust {
-    position: absolute;
-    z-index: 25;
-    font-size: 60px;
-    color: #ffffff;
-    pointer-events: none;
-    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.6));
-    animation: windVibration 0.1s infinite alternate;
-}
-
 .menu-overlay { background-color: rgba(15, 32, 39, 0.3); backdrop-filter: blur(10px); z-index: 200; }
 .victory-overlay { background-color: rgba(255, 215, 0, 0.2); backdrop-filter: blur(12px); z-index: 300; }
 .menu-overlay.hidden, .victory-overlay.hidden { opacity: 0; pointer-events: none; }
@@ -247,7 +252,7 @@
 .menu-content { padding: 50px 70px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); border: 4px solid; }
 .victory-content { padding: 60px 80px; border-radius: 30px; background: linear-gradient(135deg, #FFFDF0, #FFF5D1); border: 6px solid #FFD700; box-shadow: 0 25px 60px rgba(212, 175, 55, 0.5); }
 
-/* textos menú */
+/* textografía menú */
 .menu-content h1, .menu-content p, .menu-content button { position: relative; z-index: 10; }
 .menu-content h1 { font-family: 'Arial Black', sans-serif; font-size: 36px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 .menu-content p { font-family: Arial, sans-serif; margin-bottom: 30px; font-size: 18px; font-weight: bold; }
@@ -304,7 +309,7 @@ body.level-4 .menu-environment::before { content: ''; position: absolute; top: 0
 body.level-4 .menu-environment::after { content: ''; position: absolute; top: -10%; left: 45%; width: 8px; height: 120%; background: linear-gradient(to bottom, #FFFFFF, #80DEEA); filter: url(#lightning-effect) drop-shadow(0 0 15px #00E5FF) drop-shadow(0 0 30px #00B0FF); opacity: 0; animation: strikeLightning 5s linear infinite; z-index: 2; }
 
 /* animaciones y keyframes */
-@keyframes flap { 0% { transform: scaleX(-1) rotate(-6deg) translateY(0px); } 100% { transform: scaleX(-1) rotate(6deg) translateY(5px); } }
+@keyframes flap { 0% { transform: translateY(-50%) rotate(-6deg); } 100% { transform: translateY(-50%) rotate(6deg) translateY(5px); } } /*pajaro*/
 @keyframes spinBread { from { background-position: 0px -32px; } to { background-position: -128px -32px; } }
 @keyframes rotateSun { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.05); } 100% { transform: rotate(360deg) scale(1); } }
 @keyframes pulseSunset { 0% { opacity: 0.5; } 100% { opacity: 1; } }
@@ -316,7 +321,6 @@ body.level-4 .menu-environment::after { content: ''; position: absolute; top: -1
 @keyframes rainFall { 0% { transform: translateY(-50px) rotate(15deg);} 100% { transform: translateY(105vh) translateX(-100px) rotate(15deg); } }
 @keyframes flashLightningReal {0%, 100% { opacity: 0; } 10%, 30% { opacity: 1; transform: scaleX(1.2) skewX(-4deg); } 20% { opacity: 0.2; } 40% { opacity: 0.8; transform: scaleX(0.8) skewX(4deg); } } /*rayo juego */
 @keyframes windVibration { 0% { transform: translateY(-3px); } 100% { transform: translateY(3px); }} /* viento */
-@keyframes flap { 0% { transform: translateY(-50%) rotate(-6deg); } 100% { transform: translateY(-50%) rotate(6deg) translateY(5px); } } /*pajaro*/
 
 /* IMG fondo juego */
 /* Nivel 1 */

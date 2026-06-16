@@ -1,13 +1,20 @@
 // variables globales del juego
 
-let points = 0; //contador de panes recogidos
-let posY = window.innerHeight / 2; //posición Y inicial de la paloma
-let posX = 120; //posición X inicial de la paloma
-const speed = 35; //pixeles que se mueve la paloma por tecla pulsada
-let breadFrameCount = 0; //control de generación de panes
-let lives = 3; //vidas iniciales del jugador
-let obstacleFrameCount = 0; //control de generación de obstáculos
-let currentLevel = 1; //nivel actual por donde empieza
-let isPaused = true; //el juego arranca pausado (para el menú de inicio)
-let windFrameCount = 0; // control de tiempo para las ráfagas
-let activeWindForce = 0; // fuerza de empuje actual del viento
+// 1. ESTADO DEL JUGADOR (PALOMA)
+let lives = 3;                      // vidas iniciales del jugador
+let points = 0;                     // contador global de panes recogidos (puntuación)
+let posY = window.innerHeight / 2;  // coordenada Y inicial
+let posX = 120;                     // coordenada X inicial
+
+// 2. FÍSICAS Y MECÁNICAS DE MOVIMIENTO
+const speed = 35;                   // píxeles que se desplaza la paloma por cada pulsación de tecla
+let activeWindForce = 0;            // fuerza física actual de arrastre provocada por el viento (Nivel 4)
+
+// 3. CONTROL DE FLUJO Y MUNDO
+let currentLevel = 1;               // nivel por el que arranca la partida
+let isPaused = true;                // estado de pausa
+
+// 4. TEMPORIZADORES BASADOS EN FRAMES (SPAWNERS DE ENTIDADES)
+let breadFrameCount = 0;            // reloj de control para la frecuencia de aparición de panes
+let obstacleFrameCount = 0;         // reloj de control para la frecuencia de aparición de aviones
+let windFrameCount = 0;             // reloj de control para la frecuencia de aparición de ráfagas de viento
