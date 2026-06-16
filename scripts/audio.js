@@ -25,21 +25,25 @@ const bgMusic = new Audio('./assets/music/town.wav');
 bgMusic.loop = true;
 bgMusic.volume = 0.5;
 
+// inicia la música de fondo controlando posibles bloqueos del navegador
 function playMusic() {
     bgMusic.play().catch(error => {
         console.log("Error al reproducir la música de fondo:", error);
     });
 }
 
+//detener la música
 function stopMusic() {
     bgMusic.pause();
     bgMusic.currentTime = 0; // reinicia la canción desde el principio
 }
 
+//pausa música cuando hay transicion de nivel
 function pauseMusic() {
     bgMusic.pause(); // por si quiero pausarla sin reiniciar el tiempo
 }
 
+// disparadores de efectos de sonido (FX)
 function levelUpSoundEffect () {
     levelUpSound.currentTime = 0;
     levelUpSound.play().catch(error => {
