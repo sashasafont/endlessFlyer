@@ -80,6 +80,7 @@
     filter: drop-shadow(2px 2px 0px #000000); /* sombra sólida */
 }
 
+/* contenedor volumen */
 #volume-container {
     position: fixed;
     bottom: 15px;
@@ -87,30 +88,21 @@
     z-index: 1000;
     background-color: rgba(255, 255, 255, 0.7);
     color: #5d4037;
-    padding: 8px; 
+    padding: 8px 12px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0px; 
-    width: 36px; 
+    gap: 8px; /* espacio base entre el icono y los idiomas */
+    width: auto;
     height: 36px;
     cursor: pointer;
     pointer-events: auto;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    transition: width 0.3s ease, background-color 0.2s ease;
+    transition: background-color 0.2s ease;
 }
 
-#volume-icon {
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    user-select: none;
-}
-
+/* el slider se mantendrá oculto hasta que pasas el ratón por encima */
 #volume-slider {
     width: 0px;
     height: 4px;
@@ -120,16 +112,46 @@
     transition: width 0.3s ease, opacity 0.2s ease;
 }
 
+/* el efecto hover para expandir el slider en medio */
 #volume-container:hover {
-    width: 115px; /* se expande */
-    gap: 8px;     /* separa el icono del slider */
     background-color: rgba(255, 255, 255, 0.9);
 }
 
 #volume-container:hover #volume-slider {
-    width: 60px;  /* muestra la barra */
+    width: 60px; /* despliega el slider */
     opacity: 1;
     pointer-events: auto;
+}
+
+/* boton idioma */
+.language-selector {
+    display: flex;
+    gap: 4px;
+    border-left: 1px solid rgba(93, 64, 55, 0.3); /* línea que separa el sonido de los idiomas */
+    padding-left: 8px;
+}
+
+.lang-btn {
+    background: none;
+    border: none;
+    color: #5d4037;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+    background-color: rgba(93, 64, 55, 0.1);
+}
+
+/* estilo para marcar cuál está activo */
+.lang-btn.active {
+    background-color: #5d4037;
+    color: #ffffff;
 }
 
 /* transiciones para menús*/

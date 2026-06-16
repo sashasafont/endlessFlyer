@@ -34,20 +34,26 @@
     <div id="score">Panes: 0</div>
     <div class="bread"></div>
     <div id="volume-container">
-    <span id="volume-icon"><i class="bi bi-volume-up-fill"></i></span>
-    <input type="range" id="volume-slider" min="0" max="100" value="50">
-</div>
+        <span id="volume-icon"><i class="bi bi-volume-up-fill"></i></span>
+        <input type="range" id="volume-slider" min="0" max="100" value="50">
+        
+        <div class="language-selector">
+            <button type="button" id="btn-es" class="lang-btn active">ES</button>
+            <button type="button" id="btn-ca" class="lang-btn">CA</button>
+        </div>
+    </div>
     <svg style="position: absolute; width: 0; height: 0;">
         <filter id="lightning-effect">
             <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="noise" />
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" xChannelSelector="R" yChannelSelector="G" />
         </filter>
     </svg>
-    <div id="storm-container" class="storm-layer"></div>
-    <script src="variables.js"></script>
-    <script src="audio.js"></script>
-    <script src="player.js"></script>
-    <script src="obstacles.js"></script>
-    <script src="script.js"></script>
+</div>
+    <script src="./scripts/variables.js"></script>
+    <script src="./scripts/audio.js"></script>
+    <script src="./scripts/obstacles.js"></script>
+    <script src="./scripts/translations.js"></script>
+    <script src="./scripts/player.js"></script>
+    <script src="./scripts/script.js"></script>
 </body>
 </html>
