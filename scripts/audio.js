@@ -88,17 +88,17 @@ function updateGlobalVolume(volumeValue) {
     winSound.volume = fraction * 0.8;
     collectSound.volume = fraction * 0.6;
 
-    // el icono de Bootstrap según el volumen
+    // el icono de Bootstrap corregido según el volumen
     const volumeIcon = document.getElementById("volume-icon");
     if (volumeIcon) {
-        if (volumeValue == 0) {
-            // icono de mute
+        if (fraction === 0) {
+            // icono de silencio
             volumeIcon.innerHTML = '<i class="bi bi-volume-mute-fill"></i>';
-        } else if (volumeValue < 40) {
-            // icono de volumen bajo
+        } else if (fraction < 0.6) {
+            // icono de volumen medio
             volumeIcon.innerHTML = '<i class="bi bi-volume-down-fill"></i>';
         } else {
-            // icono de volumen alto
+            // icono de volumen máximo
             volumeIcon.innerHTML = '<i class="bi bi-volume-up-fill"></i>';
         }
     }

@@ -15,6 +15,65 @@ window.addEventListener("load", () => {
     const menuButton = document.getElementById("menu-button");
     const victoryMenu = document.getElementById("victory-menu");
     const restartButton = document.getElementById("restart-button");
+    const btnEs = document.getElementById("btn-es");
+    const btnCa = document.getElementById("btn-ca");
+
+    if (btnEs && btnCa) {
+        btnEs.addEventListener("click", () => {
+            currentLanguage = 'es';
+            btnEs.classList.add("active");
+            btnCa.classList.remove("active");
+            updateTextsUI();
+        });
+
+        btnCa.addEventListener("click", () => {
+            currentLanguage = 'ca';
+            btnCa.classList.add("active");
+            btnEs.classList.remove("active");
+            updateTextsUI();
+        });
+        
+    }
+
+    // función auxiliar para refrescar los textos en tiempo real si cambias de idioma a mitad de partida
+    function updateTextsUI() {
+        if (scoreElement) scoreElement.innerText = translations[currentLanguage].score + points;
+        updateLivesUI(); // llama a la función de player.js para actualizar la palabra "Vidas / Vides"
+        
+        // traducción del menú principal dependiendo de en qué nivel esté
+        if (isPaused && lives > 0) {
+            if (currentLevel === 1) {
+                menuTitle.innerText = translations[currentLanguage].initial_title;
+                menuText.innerText = translations[currentLanguage].initial_text;
+                menuButton.innerText = translations[currentLanguage].initial_btn;
+            } else if (currentLevel === 2) {
+                menuTitle.innerText = translations[currentLanguage].level2_title;
+                menuText.innerText = translations[currentLanguage].level2_text;
+                menuButton.innerText = translations[currentLanguage].level2_btn;
+            } else if (currentLevel === 3) {
+                menuTitle.innerText = translations[currentLanguage].level3_title;
+                menuText.innerText = translations[currentLanguage].level3_text;
+                menuButton.innerText = translations[currentLanguage].level3_btn;
+            } else if (currentLevel === 4) {
+                menuTitle.innerText = translations[currentLanguage].level4_title;
+                menuText.innerText = translations[currentLanguage].level4_text;
+                menuButton.innerText = translations[currentLanguage].level4_btn;
+            }
+        } else if (lives <= 0) {
+            menuTitle.innerText = translations[currentLanguage].gameOver_title;
+            menuText.innerText = translations[currentLanguage].gameOver_text;
+            menuButton.innerText = translations[currentLanguage].gameOver_btn;
+        }
+
+        // traducción menú de victoria
+        if (victoryMenu && !victoryMenu.classList.contains("hidden")) {
+            const vicTitle = victoryMenu.querySelector("h1");
+            const vicText = victoryMenu.querySelector("p");
+            if (vicTitle) vicTitle.innerText = translations[currentLanguage].victory_title;
+            if (vicText) vicText.innerText = translations[currentLanguage].victory_text;
+            if (restartButton) restartButton.innerText = translations[currentLanguage].victory_btn;
+        }
+    }
 
     // contenedor de las vidas
     let livesContainer = document.getElementById("lives-container");
@@ -25,6 +84,7 @@ window.addEventListener("load", () => {
     }
 
     updateLivesUI(); // inicializar las vidas al cargar la partida
+    updateTextsUI(); // fuerza los textos correctos
 
     // control de deslizador de volumen
     const volumeSlider = document.getElementById("volume-slider");
@@ -77,7 +137,8 @@ window.addEventListener("load", () => {
         updateLivesUI(); // redibujar corazones
 
         document.body.className = "";
-        if (scoreElement) scoreElement.innerText = "Panes: 0";
+        // updateTextsUI gestiona el reseteo de la interfaz de texto
+        updateTextsUI();
 
         // devolver paloma a la posición inicial
         posY = window.innerHeight / 2;
@@ -176,11 +237,13 @@ window.addEventListener("load", () => {
                 birdy.top < rectBread.bottom &&
                 birdy.bottom > rectBread.top
             ) {
-                bread.remove();
+                bread.parentNode.removeChild(bread);
                 points++;
-                if (scoreElement) scoreElement.innerText = "Panes: " + points;
+                if (scoreElement) scoreElement.innerText = translations[currentLanguage].score + points;
                 collectSoundEffect(); // sonido cuando se recoge pan
-                checkLevelUp(gameMenu, menuTitle, menuText, menuButton);
+                setTimeout(() => {
+                    checkLevelUp(gameMenu, menuTitle, menuText, menuButton);
+                }, 0);
             }
         });
 
@@ -208,11 +271,7 @@ window.addEventListener("load", () => {
 
                     // limpieza de objetos en juego
                     document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
-
-                    // textos del menú para avisar que se acabó el juego
-                    menuTitle.innerText = "¡SE ACABÓ!";
-                    menuText.innerText = "¿Volver a intentarlo?";
-                    menuButton.innerText = "REINTENTAR DESDE NIVEL 1";
+                    updateTextsUI();
 
                     // mostrar menú de game over
                     gameMenu.classList.remove("hidden");
@@ -343,47 +402,37 @@ window.addEventListener("load", () => {
     }
     gameLoop();
     updateStormEffect();
-});
 
 // función para chequear progreso nivel
 function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
     let shouldPause = false;
 
     switch (points) {
-        case 2:
+        case 3:
             if (currentLevel === 1) {
                 currentLevel = 2;
                 document.body.className = "level-2";
-                menuTitle.innerText = "¡FELICIDADES!";
-                menuText.innerText = "Superaste el Nivel 1. ¿Listo para el Nivel 2?";
-                menuButton.innerText = "EMPEZAR NIVEL 2";
                 shouldPause = true;
             }
             break;
 
-        case 3:
+        case 7:
             if (currentLevel === 2) {
                 currentLevel = 3;
                 document.body.className = "level-3";
-                menuTitle.innerText = "¡INCREÍBLE!";
-                menuText.innerText = "Superaste el Nivel 2. Cuidado, se hace de noche...";
-                menuButton.innerText = "EMPEZAR NIVEL 3";
                 shouldPause = true;
             }
             break;
 
-        case 4:
+        case 12:
             if (currentLevel === 3) {
                 currentLevel = 4;
                 document.body.className = "level-4";
-                menuTitle.innerText = "NIVEL FINAL";
-                menuText.innerText = "¡Último esfuerzo! Sobrevive a la tormenta y vigila los vientos.";
-                menuButton.innerText = "PULSAR PARA JUGAR";
                 shouldPause = true;
             }
             break;
 
-        case 5:
+        case 18:
             isPaused = true;
             document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
             stopMusic();
@@ -391,6 +440,8 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
             const vicOverlay = document.getElementById("victory-menu");
             if (vicOverlay) {
                 vicOverlay.classList.remove("hidden");
+                // llamamos a la función para traducir el menú de victoria
+                updateTextsUI();
                 createConfettiParticles();
             }
             return;
@@ -398,14 +449,14 @@ function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
 
     if (shouldPause) {
         isPaused = true;
+        // llamamos a la función para que asigne el texto correcto del nivel correspondiente
+        updateTextsUI();
         gameMenu.classList.remove("hidden");
         document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
         pauseMusic();
         levelUpSoundEffect(); // sonido de nivel superado
         posY = window.innerHeight / 2; 
         posX = 120;
-        breadFrameCount = 0;
-        obstacleFrameCount = 0;
         if (typeof windFrameCount !== 'undefined') windFrameCount = 0;
     }
 }
@@ -464,3 +515,4 @@ function createConfettiParticles() {
         container.appendChild(confetti);
     }
 }
+});
