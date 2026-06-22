@@ -7,7 +7,7 @@ let posY = window.innerHeight / 2;  // coordenada Y inicial
 let posX = 120;                     // coordenada X inicial
 
 // 2. FÍSICAS Y MECÁNICAS DE MOVIMIENTO
-const speed = 35;                   // píxeles que se desplaza la paloma por cada pulsación de tecla
+let speed = 35;                   // píxeles que se desplaza la paloma por cada pulsación de tecla
 let activeWindForce = 0;            // fuerza física actual de arrastre provocada por el viento (Nivel 4)
 
 // 3. CONTROL DE FLUJO Y MUNDO

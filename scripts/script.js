@@ -9,6 +9,7 @@ window.addEventListener("load", () => {
     const cloud3 = document.querySelector(".cloud3");
 
     // elementos de la interfaz de menús
+    const livesContainer = document.getElementById("lives-container");
     const gameMenu = document.getElementById("game-menu");
     const menuTitle = document.getElementById("menu-title");
     const menuText = document.getElementById("menu-text");
@@ -22,60 +23,81 @@ window.addEventListener("load", () => {
     const stormContainer = document.getElementById("storm-container");
     const confettiContainer = document.querySelector(".confetti-container");
 
-    // contenedor de vidas
-    let livesContainer = document.getElementById("lives-container");
-    if (!livesContainer) {
-        livesContainer = document.createElement("div");
-        livesContainer.id = "lives-container";
-        document.body.appendChild(livesContainer);
-    }
 
     // 2. SISTEMA DE IDIOMAS Y TEXTOS
+    window.currentLanguage = window.currentLanguage || 'es';
+
     if (btnEs && btnCa) {
         btnEs.addEventListener("click", () => {
-            currentLanguage = 'es';
+            // cambio el idioma global antes de comprobar para que no se bloquee
+            if (window.currentLanguage === 'es') return; 
+            window.currentLanguage = 'es';
+            // cambios visuales instantáneos
             btnEs.classList.add("active");
             btnCa.classList.remove("active");
+            
             updateTextsUI();
         });
 
         btnCa.addEventListener("click", () => {
-            currentLanguage = 'ca';
+            if (window.currentLanguage === 'ca') return; 
+            window.currentLanguage = 'ca';
             btnCa.classList.add("active");
             btnEs.classList.remove("active");
+
             updateTextsUI();
         });
     }
 
     // refresca todos los textos de la pantalla según el idioma seleccionado
     function updateTextsUI() {
-        if (scoreElement) scoreElement.innerText = translations[currentLanguage].score + points;
-        updateLivesUI(); // lógica importada de player.js
+        // evitar que el código rompa si las traducciones no han cargado
+        if (typeof translations === 'undefined' || !translations[window.currentLanguage]) return;
+
+        const lang = window.currentLanguage;
+
+        if (scoreElement) scoreElement.innerText = translations[lang].score + points;
+        if (typeof updateLivesUI === 'function') {
+            updateLivesUI(); 
+        }
         
         // traducción de las tarjetas del menú según el nivel actual
         if (isPaused && lives > 0) {
             const levelKey = currentLevel === 1 ? 'initial' : `level${currentLevel}`;
-            menuTitle.innerText = translations[currentLanguage][`${levelKey}_title`];
-            menuText.innerText = translations[currentLanguage][`${levelKey}_text`];
-            menuButton.innerText = translations[currentLanguage][`${levelKey}_btn`];
+            if (menuTitle) menuTitle.innerText = translations[lang][`${levelKey}_title`];
+            if (menuText) menuText.innerText = translations[lang][`${levelKey}_text`];
+            if (menuButton) menuButton.innerText = translations[lang][`${levelKey}_btn`];
         } else if (lives <= 0) {
-            menuTitle.innerText = translations[currentLanguage].gameOver_title;
-            menuText.innerText = translations[currentLanguage].gameOver_text;
-            menuButton.innerText = translations[currentLanguage].gameOver_btn;
+            if (menuTitle) menuTitle.innerText = translations[lang].gameOver_title;
+            if (menuText) menuText.innerText = translations[lang].gameOver_text;
+            if (menuButton) menuButton.innerText = translations[lang].gameOver_btn;
         }
 
         // traducción de la pantalla de victoria
         if (victoryMenu && !victoryMenu.classList.contains("hidden")) {
             const vicTitle = victoryMenu.querySelector("h1");
             const vicText = victoryMenu.querySelector("p");
-            if (vicTitle) vicTitle.innerText = translations[currentLanguage].victory_title;
-            if (vicText) vicText.innerText = translations[currentLanguage].victory_text;
-            if (restartButton) restartButton.innerText = translations[currentLanguage].victory_btn;
+            if (vicTitle) vicTitle.innerText = translations[lang].victory_title;
+            if (vicText) vicText.innerText = translations[lang].victory_text;
+            if (restartButton) restartButton.innerText = translations[lang].victory_btn;
         }
     }
 
-    // inicialización de textos y volumen al arrancar
-    updateLivesUI();
+    // inicialización del estado de los botones al cargar la página
+    function initLanguageButtons() {
+        if (btnEs && btnCa) {
+            if (window.currentLanguage === 'es') {
+                btnEs.classList.add("active");
+                btnCa.classList.remove("active");
+            } else {
+                btnCa.classList.add("active");
+                btnEs.classList.remove("active");
+            }
+        }
+    }
+
+    // ecución inicial segura
+    initLanguageButtons();
     updateTextsUI();
 
     const volumeSlider = document.getElementById("volume-slider");
@@ -86,7 +108,10 @@ window.addEventListener("load", () => {
     }
 
     // coloca a la paloma en su coordenada X inicial
-    if (pigeon) pigeon.style.left = posX + "px";
+    if (pigeon) {
+        pigeon.style.left = posX + "px";
+        pigeon.style.display = "none"; 
+    }
 
     // 3. CONTROL DE MENÚS Y REINICIO DE PARTIDA
     menuButton.addEventListener("click", () => {
@@ -94,6 +119,7 @@ window.addEventListener("load", () => {
             resetWholeGame();
         } else {
             gameMenu.classList.add("hidden");
+            if (pigeon) pigeon.style.display = "block"; //mostrar la paloma al darle al boton de iniciar/continuar
             isPaused = false;
             playMusic();
         }
@@ -127,7 +153,7 @@ window.addEventListener("load", () => {
         // reposicionamiento del jugador al centro
         posY = window.innerHeight / 2;
         posX = 120;
-
+        if (pigeon) pigeon.style.display = "block"; //mostrar la paloma cuando se reinicia
         isPaused = false;
         playMusic();
     }
@@ -135,17 +161,12 @@ window.addEventListener("load", () => {
     // 4. SISTEMA DE MOVIMIENTO Y NUBES
     let x1 = 0, x2 = 0, x3 = 0;
     const speedC1 = 0.5, speedC2 = 1.2, speedC3 = 2.5;
-
     function animateClouds() {
         if (!isPaused) {
+            // resta la velocidad de forma continua
             x1 -= speedC1;
             x2 -= speedC2;
             x3 -= speedC3;
-
-            if (Math.abs(x1) >= window.innerWidth) x1 = 0;
-            if (Math.abs(x2) >= window.innerWidth) x2 = 0;
-            if (Math.abs(x3) >= window.innerWidth) x3 = 0;
-
             if (cloud1) cloud1.style.backgroundPositionX = `${x1}px`;
             if (cloud2) cloud2.style.backgroundPositionX = `${x2}px`;
             if (cloud3) cloud3.style.backgroundPositionX = `${x3}px`;
@@ -191,7 +212,7 @@ window.addEventListener("load", () => {
                 
                 bread.remove();
                 points++;
-                if (scoreElement) scoreElement.innerText = translations[currentLanguage].score + points;
+                if (scoreElement) scoreElement.innerText = translations[window.currentLanguage].score + points;
                 collectSoundEffect();
                 
                 checkLevelUp(gameMenu, menuTitle, menuText, menuButton);
@@ -212,6 +233,7 @@ window.addEventListener("load", () => {
 
                 if (lives <= 0) {
                     isPaused = true;
+                    if (pigeon) pigeon.style.display = "none"; //ocultar a la paloma en el menú game over
                     stopMusic();
                     loseSoundEffect();
                     document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
@@ -317,6 +339,7 @@ window.addEventListener("load", () => {
                 break;
             case 18:
                 isPaused = true;
+                if (pigeon) pigeon.style.display = "none"; //ocultar a la paloma en pantalla final
                 document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
                 stopMusic();
                 winSoundEffect();
@@ -330,6 +353,7 @@ window.addEventListener("load", () => {
 
         if (shouldPause) {
             isPaused = true;
+            if (pigeon) pigeon.style.display = "none"; //oculta a la paloma
             updateTextsUI();
             gameMenu.classList.remove("hidden");
             document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
