@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Document</title>
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -30,9 +30,11 @@
         <div class="cloud2"></div>
         <div class="cloud3"></div>
         <canvas id="birdCanvas" class="pigeon" width="64" height="64"></canvas>
+        <div id="storm-container" class="storm-layer"></div>
     </div>
     <div id="score">Panes: 0</div>
 
+    <div id="lives-container"></div>
     <div id="volume-container">
         <span id="volume-icon"><i class="bi bi-volume-up-fill"></i></span>
         <input type="range" id="volume-slider" min="0" max="100" value="50">
@@ -54,5 +56,6 @@
     <script src="./scripts/translations.js"></script>
     <script src="./scripts/player.js"></script>
     <script src="./scripts/script.js"></script>
+    <script src="./scripts/responsive.js"></script>
 </body>
 </html>

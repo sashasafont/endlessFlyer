@@ -5,7 +5,7 @@ function updateLivesUI() {
     const livesContainer = document.getElementById("lives-container");
     if (!livesContainer) return;
 
-    livesContainer.innerHTML = translations[currentLanguage].lives; //traducción 
+    livesContainer.innerHTML = translations[window.currentLanguage].lives;  //traducción 
 
     // sub-caja para los corazones
     const heartsWrap = document.createElement("div");

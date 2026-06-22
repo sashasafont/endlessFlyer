@@ -6,6 +6,14 @@
     overflow: hidden; /* evita barras de scroll no deseadas */
 }
 
+body {
+    touch-action: none; /* bloquea tirones de scroll y gestos de recarga del navegador */
+    -webkit-touch-callout: none; /* evita el menú emergente en iOS */
+    -webkit-user-select: none; /* evita que seleccione elementos sin querer */
+    user-select: none;
+    overscroll-behavior: none; /* evita el efecto rebote de la pantalla */
+}
+
 .container {
     position: relative;
     height: 100vh;
@@ -18,7 +26,8 @@
     height: 100vh;
     width: 100vw;
     background-repeat: repeat-x;
-    background-size: 100% 100%;
+    background-size: auto 100%;
+    animation: scrollFondo 40s linear infinite; 
 }
 
 .pigeon {
@@ -346,3 +355,91 @@ body.level-4 .sky   { background-image: url('./assets/img/level4/1.png');}
 body.level-4 .cloud1 { background-image: url('./assets/img/level4/2.png');}
 body.level-4 .cloud2 { background-image: url('./assets/img/level4/3.png');}
 body.level-4 .cloud3 { background-image: url('./assets/img/level4/6.png')}
+
+/* AJUSTES RESPONSIVE (MÓVILES Y TABLETS)*/
+@media (max-width: 768px) {
+    /* tarjetas de los menús */
+    .menu-content h1, .victory-content h1 {
+        font-size: 2rem !important;
+    }
+    .menu-content p, .victory-content p {
+        font-size: 1rem !important;
+        padding: 0 10px;
+    }
+
+    /* separar vidas y puntos en esquinas opuestas para que no colisionen */
+    #lives-container {
+        font-size: 1.2rem !important;
+        top: 10px !important;
+        left: 10px !important;
+        padding: 6px 12px !important;
+    }
+    #lives-container i.bi-heart-fill {
+        font-size: 1.2rem !important; 
+    }
+
+    #score {
+        font-size: 1.2rem !important;
+        top: 10px !important;
+        right: 10px !important;     /* forzado a la derecha */
+        left: auto !important;      /* rompe el centrado de PC */
+        transform: none !important; 
+        padding: 6px 12px !important;
+    }
+
+    /* encoge la paloma (canvas) en pantallas pequeñas */
+    #birdCanvas {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    /* panel de control de volumen e idioma centrado en la base */
+    #volume-container {
+        width: 250px !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 auto !important;
+        transform: none !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        bottom: 10px !important;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    #volume-slider {
+        width: 60px !important;
+        opacity: 1 !important; /* para que la barra siempre sea visible sin necesidad de hover */
+        pointer-events: auto !important;
+    }
+
+    /* botones de idioma */
+    .language-selector {
+        display: flex !important;
+        gap: 2px !important;
+    }
+
+    .lang-btn {
+        font-size: 10px !important;
+        padding: 4px 6px !important;
+    }
+
+    /* reduccion de iconos */
+
+    /* panes */
+    .bread {
+        transform: scale(1.4) !important;
+    }
+
+    /* aviones */
+    .obstacle {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 35px !important;
+    }
+
+    /* viento */
+    .wind-gust {
+        font-size: 40px !important;
+    }
+}
