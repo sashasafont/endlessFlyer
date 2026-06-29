@@ -22,10 +22,13 @@ const translations = {
         gameOver_title: "¡SE ACABÓ!",
         gameOver_text: "¿Volver a intentarlo?",
         gameOver_btn: "REINTENTAR DESDE NIVEL 1",
+        ad_btn: "VER ANUNCIO PARA REVIVIR",
         // pantalla de victoria
         victory_title: "¡VICTORIA!",
         victory_text: "¡Eres el rey de la plaza! Has recolectado los panes sin piedad.",
-        victory_btn: "¿VOLVER A EMPEZAR?"
+        victory_btn: "¿VOLVER A EMPEZAR?",
+        ad_skip_btn: "Saltar anuncio",
+        ad_uses_left: "Usos restantes: {count}",
     },
     ca: {
         score: "Pans: ",
@@ -48,11 +51,12 @@ const translations = {
         gameOver_title: "S'HA ACABAT!",
         gameOver_text: "Ho vols tornar a intentar?",
         gameOver_btn: "REINTENTAR DES DE NIVELL 1",
+        ad_btn: "VEURE ANUNCI PER REVIURE",
         // pantalla de victoria
         victory_title: "VICTÒRIA!",
         victory_text: "Ets el rei de la plaça! Has recollit els pans sense pietat.",
-        victory_btn: "TORNAR A COMENÇAR?"
-    }
-};
-
-let currentLanguage = 'es';
+        victory_btn: "TORNAR A COMENÇAR?",
+        ad_skip_btn: "Saltar anunci",
+        ad_uses_left: "Usos restants: {count}",
+},
+    };

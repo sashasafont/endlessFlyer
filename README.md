@@ -1,30 +1,28 @@
-# ⚠️ STILL IN DEVELOPMENT
-
-**Endless Flyer** is currently under active development. Features, assets, and gameplay may change in future updates.
-
----
-
 # Endless Flyer
 
-**Endless Flyer** is a simple JavaScript mini game where you control a flying bird that collects bread while trying to survive as long as possible. The goal is to achieve the highest score by collecting items and avoiding mistakes.
+**Endless Flyer** is a simple JavaScript mini-game where you control a flying bird that collects bread while trying to survive as long as possible. The goal is to achieve the highest score by collecting items and avoiding obstacles.
 
 ---
 
 ## About the Game
 
-In *Endless Flyer*, you control a bird that continuously flies through the environment. Your objective is to collect bread to increase your score while maintaining control and reacting quickly to the game’s challenges.
+In *Endless Flyer*, you control a bird that continuously flies through the environment. Your objective is to collect bread to increase your score while maintaining control and reacting quickly to the game's challenges.
 The game features an endless gameplay loop that gradually tests your reflexes and timing.
 
 ---
 
 ## Features
 
-- **Progressive Level System:** - **Level 1 (Daytime):** A peaceful flight to get used to the controls while collecting your first crumbs.
+- **Progressive Level System:**
+  - **Level 1 (Daytime):** A peaceful flight to get used to the controls while collecting your first crumbs.
   - **Level 2 (Afternoon):** The sky gets busier. Watch out for oncoming airplanes!
-  - **Level 3 (Nighttime):** Reduced visibility and faster speeds make dodging obstacles a real challenge.
+  - **Level 3 (Nighttime):** Reduced visibility and higher speeds make dodging obstacles a real challenge.
   - **Level 4 (The Storm):** The ultimate final challenge. Brave the rain, flashing lightning, and heavy wind gusts that physically push your bird backward.
-- **Life System:** You start with 3 heart lives. Hitting an airplane costs you a life, but watch out—losing all of them triggers a Game Over.
-- **Dynamic Controls:** Smooth 4-way movement to dodge threats effectively.
+- **Life System:** You start with 3 heart lives. Hitting an airplane costs you a life, and losing all of them triggers a Game Over.
+- **Rewarded Ad System:** Out of lives? Watch a short ad to get an extra life and keep playing — up to 2 times per run.
+- **Dynamic Controls:** Smooth 4-way movement to dodge threats effectively, with full support for touch controls on mobile.
+- **Multi-language Support:** Switch between Spanish and Catalan at any time.
+- **Adjustable Volume:** A simple slider lets you control music and sound effects on the fly.
 - **Victory Visuals:** Reach the final score goal to trigger a special victory screen complete with animated confetti particles.
 
 ---
@@ -34,12 +32,13 @@ The game features an endless gameplay loop that gradually tests your reflexes an
 You can control the bird using two different layouts for maximum comfort:
 - **Arrow Keys:** `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`
 - **WASD Keys:** `W` (Up), `S` (Down), `A` (Left), `D` (Right)
+- **Touch Controls (mobile):** Tap any of the four screen zones (up, down, left, right) to move the bird in that direction.
 
 ---
 
 ## Built With
 
-- **HTML5 & CSS3:** For the game structure, layout container restrictions, and custom animations (clouds, rain drops, and lightning).
+- **HTML5 & CSS3:** For the game structure, responsive layout, and custom animations (clouds, rain drops, and lightning).
 - **JavaScript:** Powers the entire core game loop, dynamic random spawning, collision detection physics, and state management (pause, level-ups, game over, and reset).
 - **Bootstrap Icons:** Used for rendering high-quality vector graphics for hearts, airplanes, and wind gusts.
 
@@ -52,8 +51,6 @@ The game uses external visual assets downloaded from the internet. These include
 - Bird sprite (player character)
 - Bread collectibles
 - Background/environment graphics
-
-All assets are used for educational and non-commercial purposes.
 
 ---
 

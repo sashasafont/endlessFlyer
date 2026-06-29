@@ -18,3 +18,6 @@ let isPaused = true;                // estado de pausa
 let breadFrameCount = 0;            // reloj de control para la frecuencia de aparición de panes
 let obstacleFrameCount = 0;         // reloj de control para la frecuencia de aparición de aviones
 let windFrameCount = 0;             // reloj de control para la frecuencia de aparición de ráfagas de viento
+
+// 5. SISTEMA DE ANUNCIO CON RECOMPENSA
+let adsWatched = 0; // veces que el jugador vio anuncio en esta partida
