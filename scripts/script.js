@@ -81,7 +81,47 @@ window.addEventListener("load", () => {
             if (vicText) vicText.innerText = translations[lang].victory_text;
             if (restartButton) restartButton.innerText = translations[lang].victory_btn;
         }
+
+        const dynamicAdBtn = document.getElementById("dynamic-ad-button");
+        if (dynamicAdBtn && translations[lang].ad_btn) {
+            dynamicAdBtn.innerText = translations[lang].ad_btn;
+        }
     }
+
+    window.updateTextsUI = updateTextsUI;
+
+    //cuenta atrás despues del anuncio
+    window.startResumeCountdown = function() {
+        const countdownEl = document.createElement("div");
+        countdownEl.style.position = "fixed";
+        countdownEl.style.top = "50%";
+        countdownEl.style.left = "50%";
+        countdownEl.style.transform = "translate(-50%, -50%)";
+        countdownEl.style.fontSize = "90px";
+        countdownEl.style.fontWeight = "bold";
+        countdownEl.style.color = "#FFF";
+        countdownEl.style.textShadow = "1px 1px 4px rgba(0,0,0,0.4)";
+        countdownEl.style.zIndex = "99999";
+        countdownEl.style.fontFamily = "sans-serif";
+        document.body.appendChild(countdownEl);
+
+        let count = 3;
+        countdownEl.textContent = count;
+
+        const interval = setInterval(() => {
+            count--;
+            if (count > 0) {
+                countdownEl.textContent = count;
+            } else {
+                // Al llegar a 0 se elimina el elemento y arranca el juego directamente
+                clearInterval(interval);
+                countdownEl.remove();
+                
+                isPaused = false;
+                if (typeof playMusic === "function") playMusic();
+            }
+        }, 1000);
+    };
 
     // inicialización del estado de los botones al cargar la página
     function initLanguageButtons() {
@@ -131,6 +171,8 @@ window.addEventListener("load", () => {
 
     // resetea el estado completo del motor para empezar una nueva partida limpia
     function resetWholeGame() {
+        const dynamicAdBtn = document.getElementById("dynamic-ad-button");
+        if (dynamicAdBtn) dynamicAdBtn.remove(); // borra botón de anuncio
         victoryMenu.classList.add("hidden");
         gameMenu.classList.add("hidden");
 
@@ -145,6 +187,7 @@ window.addEventListener("load", () => {
         points = 0;
         currentLevel = 1;
         lives = 3;
+        adsWatched = 0;
         document.body.className = "";
         
         updateLivesUI();
@@ -200,27 +243,13 @@ window.addEventListener("load", () => {
 
     // 5. DETECCIÓN DE COLISIONES
     function checkCollision() {
+        if (isPaused || lives <= 0) return;
         if (!pigeon) return;
         const birdy = pigeon.getBoundingClientRect();
 
-        // 1. colisiones con panes (puntos)
-        document.querySelectorAll(".bread").forEach((bread) => {
-            const rectBread = bread.getBoundingClientRect();
-
-            if (birdy.left < rectBread.right && birdy.right > rectBread.left &&
-                birdy.top < rectBread.bottom && birdy.bottom > rectBread.top) {
-                
-                bread.remove();
-                points++;
-                if (scoreElement) scoreElement.innerText = translations[window.currentLanguage].score + points;
-                collectSoundEffect();
-                
-                checkLevelUp(gameMenu, menuTitle, menuText, menuButton);
-            }
-        });
-
-        // 2. colisiones con aviones (obstáculos)
+        // 1. colisiones con aviones (obstáculos)
         document.querySelectorAll(".obstacle").forEach((obstacle) => {
+            if (lives <= 0) return;
             const rectObstacle = obstacle.getBoundingClientRect();
 
             if (birdy.left < rectObstacle.right && birdy.right > rectObstacle.left &&
@@ -234,12 +263,36 @@ window.addEventListener("load", () => {
                 if (lives <= 0) {
                     isPaused = true;
                     if (pigeon) pigeon.style.display = "none"; //ocultar a la paloma en el menú game over
-                    stopMusic();
-                    loseSoundEffect();
-                    document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
-                    updateTextsUI();
-                    gameMenu.classList.remove("hidden");
+                    if (typeof showAdOrGameOver === "function") {
+                        showAdOrGameOver();
+                    } else {
+                        // fallback defensivo: solo se ejecuta si ads.js no llegó a cargar
+                        // (en condiciones normales showAdOrGameOver siempre existe)
+                        if (typeof stopMusic === "function") stopMusic();
+                        if (typeof loseSoundEffect === "function") loseSoundEffect();
+                        document.querySelectorAll(".bread, .obstacle, .wind-gust").forEach((el) => el.remove());
+                        updateTextsUI();
+                        gameMenu.classList.remove("hidden");
+                    }
                 }
+            }
+        });
+
+        if (lives <= 0) return;
+
+        // 2. colisiones con panes (puntos)
+        document.querySelectorAll(".bread").forEach((bread) => {
+            const rectBread = bread.getBoundingClientRect();
+
+            if (birdy.left < rectBread.right && birdy.right > rectBread.left &&
+                birdy.top < rectBread.bottom && birdy.bottom > rectBread.top) {
+                
+                bread.remove();
+                points++;
+                if (scoreElement) scoreElement.innerText = translations[window.currentLanguage].score + points;
+                collectSoundEffect();
+                
+                checkLevelUp(gameMenu, menuTitle, menuText, menuButton);
             }
         });
 
@@ -325,6 +378,9 @@ window.addEventListener("load", () => {
 
     // 7. SISTEMA DE NIVELES, CLIMA Y RECOMPENSAS FINALES
     function checkLevelUp(gameMenu, menuTitle, menuText, menuButton) {
+        const dynamicAdBtn = document.getElementById("dynamic-ad-button");
+        if (dynamicAdBtn) dynamicAdBtn.remove();
+        if (lives <= 0) return;
         let shouldPause = false;
 
         switch (points) {

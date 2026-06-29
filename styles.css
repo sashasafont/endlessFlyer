@@ -136,8 +136,7 @@ body {
 
 /* el score a la derecha */
 #score {
-    right: 0%;
-    transform: translateX(-50%);
+    right: 20px;
 }
 
 /* el live container a la izquierda */
@@ -354,7 +353,7 @@ body.level-3 .cloud3 { background-image: url('./assets/img/level3/4.png'); }
 body.level-4 .sky   { background-image: url('./assets/img/level4/1.png');}
 body.level-4 .cloud1 { background-image: url('./assets/img/level4/2.png');}
 body.level-4 .cloud2 { background-image: url('./assets/img/level4/3.png');}
-body.level-4 .cloud3 { background-image: url('./assets/img/level4/6.png')}
+body.level-4 .cloud3 { background-image: url('./assets/img/level4/4.png'); }
 
 /* AJUSTES RESPONSIVE (MÓVILES Y TABLETS)*/
 @media (max-width: 768px) {
@@ -441,5 +440,93 @@ body.level-4 .cloud3 { background-image: url('./assets/img/level4/6.png')}
     /* viento */
     .wind-gust {
         font-size: 40px !important;
+    }
+}
+
+.ad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    z-index: 400; /* por encima de victory-overlay (300) y menu-overlay (200) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+    
+.ad-overlay.hidden {
+    display: none;
+}
+
+/* placeholder, listo para sustituir por el iframe/script del anuncio real más adelante */
+#ad-placeholder {
+    width: min(320px, 85vw);
+    height: min(480px, 70vh);
+    background-color: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+
+#ad-uses-left {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #5d4037;
+    font-weight: bold;
+}
+
+/* contador "10s"*/
+#ad-countdown-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 20px;
+    z-index: 410;
+}
+
+/* botón de saltar anuncio */
+#ad-skip-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: none;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 410;
+    transition: background-color 0.2s ease;
+}
+
+#ad-skip-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+#ad-skip-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* responsive: badges algo más compactos en móvil */
+@media (max-width: 768px) {
+    #ad-countdown-badge, #ad-skip-button {
+        font-size: 11px !important;
+        padding: 5px 10px !important;
     }
 }
