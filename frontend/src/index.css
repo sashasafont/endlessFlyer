@@ -1,0 +1,370 @@
+/* reseteo y config base*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden; /* evita barras de scroll no deseadas */
+}
+
+body {
+    touch-action: none; /* bloquea tirones de scroll y gestos de recarga del navegador */
+    -webkit-touch-callout: none; /* evita el menú emergente en iOS */
+    -webkit-user-select: none; /* evita que seleccione elementos sin querer */
+    user-select: none;
+    overscroll-behavior: none; /* evita el efecto rebote de la pantalla */
+    background-color: #000;
+}
+
+.container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    z-index: 1;
+}
+
+/* capas de fondo, cielo y nubes con z-index corregidos */
+.sky, .cloud1, .cloud2, .cloud3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* el cielo es estático */
+.sky {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/* las nubes sí se desplazan (ver animateClouds en script.js) */
+.cloud1, .cloud2, .cloud3 {
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+}
+
+.sky    { z-index: 1; }
+.cloud1 { z-index: 2; }
+.cloud2 { z-index: 3; }
+.cloud3 { z-index: 4; }
+
+/* la paloma */
+.pigeon {
+    position: absolute;
+    z-index: 10;
+    width: 85px;
+    height: 85px;
+    animation: flap 0.35s infinite alternate ease-in-out; /* simula aleteo */
+}
+
+/* el pan */
+.bread {
+    position: absolute;
+    z-index: 8;
+    width: 32px; 
+    height: 32px; 
+    transform: scale(2); /* agranda sprite */
+    background-image: url('/img/bread.png');
+    background-size: 128px 128px; 
+    animation: spinBread 0.5s steps(4) infinite; /* animación por frames */
+}
+
+/* avión */
+.obstacle {
+    position: absolute;
+    z-index: 15;
+    width: 60px;
+    height: 60px;
+    font-size: 50px;
+    color: #4A5568;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* rotación del icono */
+.obstacle i {
+    display: inline-block;
+    transform: rotate(-90deg);
+}
+
+/* ráfagas de viento del Nivel 4 */
+.wind-gust {
+    position: absolute;
+    z-index: 25;
+    font-size: 60px;
+    color: #ffffff;
+    pointer-events: none;
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.6));
+    animation: windVibration 0.1s infinite alternate;
+}
+
+/* container de la tormenta */
+.storm-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* la gota */
+.drop {
+    position: absolute;
+    background: linear-gradient(transparent, rgba(255, 255, 255, 0.6));
+    width: 1.5px;
+    height: 45px;
+    opacity: 0.7;
+    transform: rotate(15deg);
+    animation: rainFall 0.6s linear infinite;
+}
+
+/* el rayo que cae durante el nivel 4 */
+.game-lightning {
+    position: absolute;
+    top: -10%;
+    width: 12px;
+    height: 120%;
+    background: linear-gradient(to bottom, #FFFFFF, #80DEEA);
+    filter: url(#lightning-effect) drop-shadow(0 0 20px #00E5FF) drop-shadow(0 0 40px #00B0FF);
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+    animation: flashLightningReal 0.4s ease-out forwards;
+}
+
+/* interfaz de usuario (score, vidas, volumen) */
+#score, #lives-container {
+    position: absolute;
+    top: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #5d4037; 
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px 20px;
+    border-radius: 20px;
+    z-index: 100;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+#score { right: 20px; }
+#lives-container { left: 20px; gap: 10px; }
+#lives-container div { display: flex; }
+
+/* aplica el diseño a cada corazón */
+#lives-container i.bi-heart-fill {
+    display: inline-block;
+    color: #ff3344; 
+    font-size: 24px; 
+    margin-right: 4px; 
+    filter: drop-shadow(2px 2px 0px #000000); 
+}
+
+/* contenedor volumen */
+#volume-container {
+    position: fixed;
+    bottom: 15px;
+    right: 25px;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #5d4037;
+    padding: 8px 12px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; 
+    width: auto;
+    height: 36px;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease;
+}
+
+#volume-slider {
+    width: 0px;
+    height: 4px;
+    opacity: 0;
+    cursor: pointer;
+    pointer-events: none;
+    transition: width 0.3s ease, opacity 0.2s ease;
+}
+
+#volume-container:hover { background-color: rgba(255, 255, 255, 0.9); }
+#volume-container:hover #volume-slider {
+    width: 60px; 
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* selector de idioma: <select> nativo, el navegador maneja todo el comportamiento */
+.language-selector {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-left: 1px solid rgba(93, 64, 55, 0.3);
+    padding-left: 8px;
+    color: #5d4037;
+}
+
+.lang-select {
+    background: none;
+    border: none;
+    color: #5d4037;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 2px;
+    border-radius: 8px;
+}
+
+.lang-select:hover { background-color: rgba(93, 64, 55, 0.1); }
+.lang-select:focus-visible { outline: 2px solid #5d4037; outline-offset: 2px; }
+
+/* transiciones para menús*/
+.menu-overlay, .victory-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+/* Menú */
+.menu-overlay { background-color: rgba(15, 32, 39, 0.3); backdrop-filter: blur(10px); z-index: 200; }
+.victory-overlay { background-color: rgba(255, 215, 0, 0.2); backdrop-filter: blur(12px); z-index: 300; }
+.menu-overlay.hidden, .victory-overlay.hidden { display: none !important; opacity: 0; pointer-events: none; }
+.menu-content, .victory-content { position: relative; overflow: hidden; text-align: center; transition: all 0.5s ease-in-out; }
+.menu-content { padding: 50px 70px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); border: 4px solid; width: min(520px, 88vw); box-sizing: border-box; }
+.victory-content { padding: 60px 80px; border-radius: 30px; background: linear-gradient(135deg, #FFFDF0, #FFF5D1); border: 6px solid #FFD700; box-shadow: 0 25px 60px rgba(212, 175, 55, 0.5); }
+.menu-content h1, .menu-content p, .menu-content button { position: relative; z-index: 10; }
+.menu-content h1 { font-family: 'Arial Black', sans-serif; font-size: 36px; line-height: 1.2; letter-spacing: 0.3px; margin-bottom: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.menu-content p { font-family: Arial, sans-serif; line-height: 1.5; margin-bottom: 30px; font-size: 18px; font-weight: bold; }
+
+.victory-content h1 { font-family: 'Arial Black', sans-serif; font-size: 42px; color: #B8860B; text-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; animation: bounceTitle 1s ease-in-out infinite alternate; }
+.victory-content p { font-family: Arial, sans-serif; color: #745200; font-size: 20px; font-weight: bold; margin-bottom: 35px; max-width: 450px; }
+
+.menu-content button, #restart-button { border: none; font-weight: bold; cursor: pointer; transition: transform 0.1s, background-color 0.2s, box-shadow 0.2s; }
+.menu-content button { color: white; padding: 14px 35px; font-size: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); min-width: 220px; }
+.menu-content button:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+#restart-button { background: linear-gradient(to bottom, #FFDF00, #D4AF37); color: #5D4037; border: 2px solid #B8860B; padding: 16px 40px; font-size: 22px; border-radius: 50px; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+#restart-button:hover { transform: scale(1.08); box-shadow: 0 12px 25px rgba(212, 175, 55, 0.6); }
+
+.menu-environment { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.confetti-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; perspective: 700px; }
+.confetti-piece { position: absolute; top: -20px; border-radius: 2px; animation: fallAndSpin 4s linear infinite; }
+
+/* TEMAS DE COLOR Y FONDOS */
+/* NIVEL 1 */
+body:not([class*="level-"]) .menu-content { background: linear-gradient(135deg, #FFFDF0, #E0F6FF); border-color: #87CEEB; }
+body:not([class*="level-"]) .menu-content h1 { color: #2B6CB0; }
+body:not([class*="level-"]) .menu-content p  { color: #4A5568; }
+body:not([class*="level-"]) .menu-content button { background-color: #87CEEB; }
+body:not([class*="level-"]) .menu-content button:hover { background-color: #4DB8E7; }
+body:not([class*="level-"]) .menu-environment::before { content: ''; position: absolute; top: -20px; right: -20px; width: 90px; height: 90px; background: #FFDE4D; border-radius: 50%; box-shadow: 0 0 30px #FFDE4D, 0 0 60px #FFB200; animation: rotateSun 10s linear infinite; }
+body:not([class*="level-"]) .sky    { background-image: url('/img/level1/1.png'); }
+body:not([class*="level-"]) .cloud1 { background-image: url('/img/level1/2.png'); }
+body:not([class*="level-"]) .cloud2 { background-image: url('/img/level1/3.png'); }
+body:not([class*="level-"]) .cloud3 { background-image: url('/img/level1/4.png'); }
+
+/* NIVEL 2 */
+body.level-2 .menu-content { background: linear-gradient(135deg, #FFEBE5, #FFE2CD); border-color: #FF7E5F; }
+body.level-2 .menu-content h1 { color: #D73815; }
+body.level-2 .menu-content p  { color: #7B341E; }
+body.level-2 .menu-content button { background-color: #FF7E5F; }
+body.level-2 .menu-content button:hover { background-color: #FA623C; }
+body.level-2 .menu-environment::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, rgba(255, 75, 43, 0.4), transparent); animation: pulseSunset 3s ease-in-out infinite alternate; }
+body.level-2 .sky    { background-image: url('/img/level2/1.png'); }
+body.level-2 .cloud1 { background-image: url('/img/level2/2.png'); }
+body.level-2 .cloud2 { background-image: url('/img/level2/3.png'); }
+body.level-2 .cloud3 { background-image: url('/img/level2/4.png'); }
+
+/* NIVEL 3 */
+body.level-3 .menu-content { background: linear-gradient(135deg, #1A1C29, #2A2E45); border-color: #3498DB; }
+body.level-3 .menu-content h1 { color: #ECEFF1; text-shadow: 0 0 10px #3498DB; }
+body.level-3 .menu-content p  { color: #90A4AE; }
+body.level-3 .menu-content button { background-color: #3498DB; }
+body.level-3 .menu-content button:hover { background-color: #1A79B8; }
+body.level-3 .menu-environment::before { content: ''; position: absolute; top: -10px; left: 70%; width: 4px; height: 4px; background: white; border-radius: 50%; box-shadow: 0 0 10px white, -10px 10px 15px white, -20px 20px 20px rgba(255,255,255,0.5); animation: shootingStar 2.5s linear infinite; }
+body.level-3 .sky    { background-image: url('/img/level3/1.png'); }
+body.level-3 .cloud1 { background-image: url('/img/level3/2.png'); }
+body.level-3 .cloud2 { background-image: url('/img/level3/3.png'); }
+body.level-3 .cloud3 { background-image: url('/img/level3/4.png'); }
+
+/* NIVEL 4 */
+body.level-4 .menu-content { background: linear-gradient(135deg, #0F172A, #1E293B); border-color: #10B981; }
+body.level-4 .menu-content h1 { color: #FFFFFF; text-shadow: 0 0 15px #10B981; }
+body.level-4 .menu-content p  { color: #94A3B8; }
+body.level-4 .menu-content button { background-color: #10B981; }
+body.level-4 .menu-content button:hover { background-color: #059669; }
+body.level-4 .menu-environment::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.4); opacity: 0; animation: flashBackground 5s linear infinite; animation-delay: -4.2s; z-index: 1; }
+body.level-4 .menu-environment::after { content: ''; position: absolute; top: -10%; left: 45%; width: 8px; height: 120%; background: linear-gradient(to bottom, #FFFFFF, #80DEEA); filter: url(#lightning-effect) drop-shadow(0 0 15px #00E5FF) drop-shadow(0 0 30px #00B0FF); opacity: 0; animation: strikeLightning 5s linear infinite; animation-delay: -4.2s; z-index: 2; }
+body.level-4 .sky    { background-image: url('/img/level4/1.png'); }
+body.level-4 .cloud1 { background-image: url('/img/level4/2.png'); }
+body.level-4 .cloud2 { background-image: url('/img/level4/3.png'); }
+body.level-4 .cloud3 { background-image: url('/img/level4/4.png'); }
+
+/* animaciones y keyframes */
+@keyframes flap { 0% { transform: rotate(-6deg); } 100% { transform: rotate(6deg) translateY(5px); } } 
+@keyframes spinBread { from { background-position: 0px -32px; } to { background-position: -128px -32px; } }
+@keyframes rotateSun { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.05); } 100% { transform: rotate(360deg) scale(1); } }
+@keyframes pulseSunset { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+@keyframes bounceTitle { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+@keyframes shootingStar { 0% { transform: translateX(0) translateY(0) scale(0); opacity: 1; } 30% { transform: translateX(-150px) translateY(150px) scale(1); opacity: 1; } 60% { transform: translateX(-300px) translateY(300px) scale(0); opacity: 0; } 100% { transform: translateX(-300px) translateY(300px) scale(0); opacity: 0; } }
+@keyframes flashBackground { 0%, 84%, 88%, 92%, 100% { opacity: 0; } 85%, 89% { opacity: 0.6; } 86% { opacity: 0.1; } 90% { opacity: 1; } } 
+@keyframes strikeLightning { 0%, 84%, 88%, 92%, 100% { opacity: 0; transform: scaleX(1); } 85% { opacity: 0.9; transform: scaleX(0.8) skewX(-5deg); } 86% { opacity: 0; } 90% { opacity: 1; transform: scaleX(1.3) skewX(5deg); } 91% { opacity: 0.5; transform: scaleX(0.5); } }
+@keyframes fallAndSpin { 0% { transform: translateY(0) rotateX(0deg) rotateY(0deg) rotateZ(0deg); opacity: 1; } 100% { transform: translateY(450px) rotateX(720deg) rotateY(360deg) rotateZ(180deg); opacity: 0; } }
+@keyframes rainFall { 0% { transform: translateY(-50px) rotate(15deg);} 100% { transform: translateY(105vh) translateX(-100px) rotate(15deg); } }
+@keyframes flashLightningReal {0%, 100% { opacity: 0; } 10%, 30% { opacity: 1; transform: scaleX(1.2) skewX(-4deg); } 20% { opacity: 0.2; } 40% { opacity: 0.8; transform: scaleX(0.8) skewX(4deg); } } 
+@keyframes windVibration { 0% { transform: translateY(-3px); } 100% { transform: translateY(3px); }} 
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .menu-content h1, .victory-content h1 { font-size: 2rem !important; }
+    .menu-content p, .victory-content p { font-size: 1rem !important; padding: 0 10px; }
+    #lives-container { font-size: 1.2rem !important; top: 10px !important; left: 10px !important; padding: 6px 12px !important; }
+    #lives-container i.bi-heart-fill { font-size: 1.2rem !important; }
+    #score { font-size: 1.2rem !important; top: 10px !important; right: 10px !important; left: auto !important; transform: none !important; padding: 6px 12px !important; }
+    #birdCanvas { width: 60px !important; height: 60px !important; }
+    #volume-container { width: 250px !important; left: 0 !important; right: 0 !important; margin: 0 auto !important; transform: none !important; flex-wrap: nowrap !important; align-items: center !important; bottom: 10px !important; justify-content: center; gap: 10px; }
+    #volume-slider { width: 60px !important; opacity: 1 !important; pointer-events: auto !important; }
+    .lang-select { font-size: 11px !important; padding: 3px 2px !important; }
+    .bread { transform: scale(1.4) !important; }
+    .obstacle { width: 40px !important; height: 40px !important; font-size: 35px !important; }
+    .wind-gust { font-size: 40px !important; }
+}
+
+.ad-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    z-index: 400; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ad-overlay.hidden { display: none !important; }
+#ad-placeholder { width: min(320px, 85vw); height: min(480px, 70vh); background-color: #ffffff; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+#ad-placeholder-text { font-family: Arial, sans-serif; font-size: 16px; color: #5d4037; font-weight: bold; }
+#ad-countdown-badge { position: absolute; top: 16px; left: 16px; background-color: rgba(255, 255, 255, 0.15); color: #ffffff; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; padding: 6px 12px; border-radius: 20px; z-index: 410; }
+
+@media (max-width: 768px) {
+    #ad-countdown-badge { font-size: 11px !important; padding: 5px 10px !important; }
+}
